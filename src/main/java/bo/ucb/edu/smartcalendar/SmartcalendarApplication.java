@@ -10,4 +10,6 @@ public class SmartcalendarApplication {
 		SpringApplication.run(SmartcalendarApplication.class, args);
 	}
 
+	
+
 }

@@ -1,4 +1,4 @@
-package bo.ucb.edu.smartcalendar.API;
+package bo.ucb.edu.smartcalendar.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
