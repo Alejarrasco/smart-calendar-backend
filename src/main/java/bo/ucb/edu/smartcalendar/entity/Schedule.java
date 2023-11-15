@@ -1,5 +1,7 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.util.Set;
+
 import java.sql.Date;
 
 import jakarta.persistence.Column;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -34,6 +37,9 @@ public class Schedule {
 
     @Column(name = "close_date", nullable = false)
     private Date closeDate;
+
+    @OneToMany(mappedBy = "schedule")
+    private Set<Assignation> assignations;
 
 
     // Constructor de la clase Schedule.java
