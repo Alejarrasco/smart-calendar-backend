@@ -25,8 +25,8 @@ public class Assignation {
     private Schedule schedule;
 
     @ManyToOne
-    @JoinColumn(name = "solitude_id", nullable = false)
-    private Solicitude solitude;
+    @JoinColumn(name = "solicitude_id", nullable = false)
+    private Solicitude solicitude;
 
     @Column(name = "approve_date", nullable = true)
     private Date approveDate;
@@ -60,13 +60,13 @@ public class Assignation {
     }
 
 
-    public Solicitude getSolitude() {
-        return solitude;
+    public Solicitude getsolicitude() {
+        return solicitude;
     }
 
 
-    public void setSolitude(Solicitude solitude) {
-        this.solitude = solitude;
+    public void setsolicitude(Solicitude solicitude) {
+        this.solicitude = solicitude;
     }
 
 

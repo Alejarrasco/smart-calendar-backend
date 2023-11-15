@@ -37,6 +37,9 @@ public class Subject {
     @OneToMany(mappedBy = "subject")
     private Set<Responsible> responsibles;
 
+    @OneToMany(mappedBy = "subject")
+    private Set<Solicitude> solicitudes;
+
 
     // Constructor de la clase Subject.java
     public Subject() {

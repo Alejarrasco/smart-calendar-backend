@@ -1,10 +1,13 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,6 +29,12 @@ public class Person {
 
     @Column(name = "username", length = 100, nullable = false)
     private String username;
+
+    @OneToMany(mappedBy = "person")
+    private Set<Solicitude> solicitudes;
+
+    @OneToMany(mappedBy = "person")
+    private Set<Responsible> responsibles;
 
 
     // Constructor de la clase Person.java

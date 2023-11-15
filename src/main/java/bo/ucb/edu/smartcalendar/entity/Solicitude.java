@@ -16,13 +16,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "solitude")
+@Table(name = "solicitude")
 public class Solicitude {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "solitude_id")
-    private int solitudeId;
+    @Column(name = "solicitude_id")
+    private int solicitudeId;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
@@ -36,8 +36,8 @@ public class Solicitude {
     private Date registerDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "solitude_status", nullable = false)
-    private SolitudeStatus solitudeStatus;
+    @Column(name = "solicitude_status", nullable = false)
+    private SolicitudeStatus solicitudeStatus;
 
     @Column(name = "recurrent", nullable = false)
     private boolean recurrent;
@@ -48,7 +48,7 @@ public class Solicitude {
     @Column(name = "end_date", nullable = true)
     private Date endDate;
 
-    @OneToMany(mappedBy = "solitude")
+    @OneToMany(mappedBy = "solicitude")
     private Set<Assignation> assignations;
 
 
@@ -57,13 +57,13 @@ public class Solicitude {
     }
 
 
-    public int getSolitudeId() {
-        return solitudeId;
+    public int getsolicitudeId() {
+        return solicitudeId;
     }
 
 
-    public void setSolitudeId(int solitudeId) {
-        this.solitudeId = solitudeId;
+    public void setsolicitudeId(int solicitudeId) {
+        this.solicitudeId = solicitudeId;
     }
 
 
@@ -97,13 +97,13 @@ public class Solicitude {
     }
 
 
-    public SolitudeStatus getSolitudeStatus() {
-        return solitudeStatus;
+    public SolicitudeStatus getsolicitudeStatus() {
+        return solicitudeStatus;
     }
 
 
-    public void setSolitudeStatus(SolitudeStatus solitudeStatus) {
-        this.solitudeStatus = solitudeStatus;
+    public void setSolicitudeStatus(SolicitudeStatus solicitudeStatus) {
+        this.solicitudeStatus = solicitudeStatus;
     }
 
 
@@ -138,7 +138,7 @@ public class Solicitude {
 
 
     //enum para el estado de la solicitud
-    public enum SolitudeStatus {
+    public enum SolicitudeStatus {
         PENDING("Pendiente"),
         APPROVED("Aprobada"),
         PAST("Pasada"),
@@ -147,7 +147,7 @@ public class Solicitude {
 
         private String status;
 
-        private SolitudeStatus(String status) {
+        private SolicitudeStatus(String status) {
             this.status = status;
         }
 
@@ -155,8 +155,8 @@ public class Solicitude {
             return status;
         }
 
-        public static SolitudeStatus fromStatus(String status) {
-            for (SolitudeStatus s : SolitudeStatus.values()) {
+        public static SolicitudeStatus fromStatus(String status) {
+            for (SolicitudeStatus s : SolicitudeStatus.values()) {
                 if (s.getStatus().equals(status)) {
                     return s;
                 }
