@@ -12,12 +12,12 @@ import bo.ucb.edu.smartcalendar.entity.Planification;
 public interface PlanificationViewRepository extends JpaRepository<Planification, Integer> {
     
     @Query(
-        value = "SELECT * FROM planification WHERE recurrent = 0 AND start_date BETWEEN ?1 AND DATE_ADD(?1, INTERVAL 7 DAY)", 
+        value = "SELECT * FROM planification WHERE recurrent = 0 AND start_date BETWEEN ?1 AND DATE_ADD(?1, INTERVAL 7 DAY) AND space_id = ?2", 
         nativeQuery = true)
-    public List<Planification> ListNonRecurrentAssignationsSinceLastMonday(String lastMondayDate);
+    public List<Planification> ListNonRecurrentAssignationsSinceLastMondayBySpace(String lastMondayDate, Integer spaceId);
 
     @Query(
-        value = "SELECT * FROM planification WHERE recurrent = 1 AND start_date < ?1 AND end_date > DATE_ADD(?1, INTERVAL 7 DAY)", 
+        value = "SELECT * FROM planification WHERE recurrent = 1 AND start_date < ?1 AND end_date > DATE_ADD(?1, INTERVAL 7 DAY) AND space_id = ?2", 
         nativeQuery = true)
-    public List<Planification> ListRecurrentAssignationsSinceLastMonday(String lastMondayDate);
+    public List<Planification> ListRecurrentAssignationsSinceLastMondayBySpace(String lastMondayDate, Integer spaceId);
 }

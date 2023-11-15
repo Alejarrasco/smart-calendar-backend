@@ -18,6 +18,12 @@ public class Planification {
     @Column(name = "assignation_id")
     private int assignationId;
 
+    @Column(name = "space_id")
+    private int spaceId;
+
+    @Column(name = "space_name")
+    private String spaceName;
+
     @Column(name = "subject_name")
     private String subjectName;
 

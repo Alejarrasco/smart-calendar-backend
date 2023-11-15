@@ -1,11 +1,15 @@
 package bo.ucb.edu.smartcalendar.bl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.entity.Space;
+import bo.ucb.edu.smartcalendar.entity.Space.SpaceType;
 import bo.ucb.edu.smartcalendar.repository.SpaceRepository;
 
 @Service
@@ -18,15 +22,17 @@ public class SpaceBl {
         this.spaceRepository = spaceRepository;
     }
 
-    public List<Space> getAllSpaces() {
-        return spaceRepository.findAll();
-    }
+    public SmartcalResponse ListSpacesGroupedByType(){
+        SpaceType[] spaceTypes = SpaceType.values();
+        Map<SpaceType, List<Space>> spacesGroupedByType = new HashMap<SpaceType, List<Space>>();
 
-    public Space getSpaceById(Integer spaceId) {
-        return spaceRepository.findById(spaceId).orElse(null);
-    }
-
-    public Space saveSpace(Space space) {
-        return spaceRepository.save(space);
+        for(SpaceType spaceType : spaceTypes){
+            List<Space> spacesOfType = spaceRepository.findBySpaceType(spaceType);
+            spacesGroupedByType.put(spaceType, spacesOfType);
+        }
+        
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(spacesGroupedByType);
+        return response;
     }
 }

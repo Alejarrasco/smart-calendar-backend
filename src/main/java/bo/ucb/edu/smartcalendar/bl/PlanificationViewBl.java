@@ -24,13 +24,13 @@ public class PlanificationViewBl {
         this.planificationViewRepository = planificationViewRepository;
     }
 
-    public SmartcalResponse ListAssignationsInCurrentWeek(){
+    public SmartcalResponse ListAssignationsInCurrentWeekBySpace(Integer spaceId){
         //TODO: Manage exceptions
         //TODO: Validate results
         String lastMonday = getLastMonday();
 
-        List<Planification> nonRecurrentAssignations = planificationViewRepository.ListNonRecurrentAssignationsSinceLastMonday(lastMonday);
-        List<Planification> recurrentAssignations = planificationViewRepository.ListRecurrentAssignationsSinceLastMonday(lastMonday);
+        List<Planification> nonRecurrentAssignations = planificationViewRepository.ListNonRecurrentAssignationsSinceLastMondayBySpace(lastMonday, spaceId);
+        List<Planification> recurrentAssignations = planificationViewRepository.ListRecurrentAssignationsSinceLastMondayBySpace(lastMonday, spaceId);
         List<Planification> thisWeekAssignations = new ArrayList<Planification>();
 
         thisWeekAssignations.addAll(nonRecurrentAssignations);
