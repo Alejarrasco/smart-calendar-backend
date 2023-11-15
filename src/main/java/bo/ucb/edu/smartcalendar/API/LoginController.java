@@ -16,7 +16,7 @@ public class LoginController {
     @PostMapping (path = "/protected")
     public TestiDto login(@RequestHeader("Authorization") String token, @RequestHeader("User-Agent") String userAgent, @RequestBody TestiDto body){
 
-        System.out.println("Hello World "+token);
+        System.out.println("Hello World "+token.split(" ")[1]);
         System.out.println("you are "+body.getName());
         return new TestiDto(userAgent);
     }
