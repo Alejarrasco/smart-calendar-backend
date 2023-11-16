@@ -53,13 +53,13 @@ public class PlanificationViewBl {
         //Group by weekday, then period_id
         Weekday[] weekdays = Weekday.values();
         List<Period> periods = periodRepository.findAll();
-        HashMap<Weekday, HashMap<Integer, Planification>> assignationsGroupedByDayAndPeriod = new HashMap<Weekday, HashMap<Integer, Planification>>();
+        HashMap<Weekday, HashMap<String, Planification>> assignationsGroupedByDayAndPeriod = new HashMap<Weekday, HashMap<String, Planification>>();
         for(Weekday weekday : weekdays){
-            HashMap<Integer, Planification> thisDayAssignations = new HashMap<Integer, Planification>();
+            HashMap<String, Planification> thisDayAssignations = new HashMap<String, Planification>();
             for(Period period : periods){
                 for(Planification assignation : thisWeekAssignations){
                     if(assignation.getWeekDay() == weekday && assignation.getPeriodId() == period.getPeriodId()){
-                        thisDayAssignations.put(period.getPeriodId(), assignation);
+                        thisDayAssignations.put(period.getStartTime().toString(), assignation);
                         //TODO si hay choque de horarios este valor se sobrescribe, manejar esta excepción
                     }
                 }
