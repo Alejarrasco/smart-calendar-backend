@@ -41,4 +41,16 @@ public class SpaceBl {
         response.setData(spacesGroupedByType);
         return response;
     }
+
+    public SmartcalResponse FindSpaceById(Integer id) throws RuntimeException{
+        Space space = spaceRepository.findById(id).orElse(null);
+        if (space == null) {
+            LOGGER.error("Space not found");
+            throw new RuntimeException("Space not found");
+        }
+        LOGGER.info("Space: " + space);
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(space);
+        return response;
+    }
 }

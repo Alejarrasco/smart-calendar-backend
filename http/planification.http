@@ -1,5 +1,5 @@
 ###
-GET http://localhost:8080/api/v1/planification/space/1
+GET http://localhost:8080/api/v1/planification/space/3
 Accept: application/json
 
 ###

@@ -31,4 +31,18 @@ public class SpaceAPI {
         response.setCode("SPAC-0000");
         return response;
     }
+
+    @GetMapping(path = "/{id}")
+    public SmartcalResponse FindSpaceById(Integer id){
+        LOGGER.info("Called FindSpaceById");
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            response = spaceBl.FindSpaceById(id);
+            response.setCode("SPAC-0001");
+        } catch (RuntimeException e) {
+            response.setCode("SPAC-6001");
+            response.setErrormessage("No se encontró el espacio especificado");
+        }
+        return response;
+    }
 }
