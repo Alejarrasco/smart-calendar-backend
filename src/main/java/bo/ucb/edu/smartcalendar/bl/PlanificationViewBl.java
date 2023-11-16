@@ -9,6 +9,8 @@ import java.util.List;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.entity.Planification;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import bo.ucb.edu.smartcalendar.repository.PlanificationViewRepository;
 
 @Service
 public class PlanificationViewBl {
+
+    Logger LOGGER = LoggerFactory.getLogger(PlanificationViewBl.class);
     
     @Autowired
     private PlanificationViewRepository planificationViewRepository;
@@ -30,7 +34,9 @@ public class PlanificationViewBl {
         String lastMonday = getLastMonday();
 
         List<Planification> nonRecurrentAssignations = planificationViewRepository.ListNonRecurrentAssignationsSinceLastMondayBySpace(lastMonday, spaceId);
+        LOGGER.info("Non recurrent assignations: " + nonRecurrentAssignations);
         List<Planification> recurrentAssignations = planificationViewRepository.ListRecurrentAssignationsSinceLastMondayBySpace(lastMonday, spaceId);
+        LOGGER.info("Recurrent assignations: " + recurrentAssignations);
         List<Planification> thisWeekAssignations = new ArrayList<Planification>();
 
         thisWeekAssignations.addAll(nonRecurrentAssignations);
@@ -51,7 +57,7 @@ public class PlanificationViewBl {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = lastMonday.format(formatter);
-
+        LOGGER.info("Last monday: " + formattedDate);
         return formattedDate;
     }
 }

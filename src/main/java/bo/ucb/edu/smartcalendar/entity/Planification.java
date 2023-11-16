@@ -10,11 +10,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 
 @Entity(name = "planification")
 @Immutable
 public class Planification {
-    
+
+    @Id
     @Column(name = "assignation_id")
     private int assignationId;
 
@@ -46,7 +48,7 @@ public class Planification {
     private int periodId;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "week_day")
+    @Column(name = "weekday")
     private Weekday weekDay;
 
     @Column(name = "start_time")
