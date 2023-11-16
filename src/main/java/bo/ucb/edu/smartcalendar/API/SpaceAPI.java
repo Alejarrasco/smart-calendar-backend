@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import bo.ucb.edu.smartcalendar.bl.PlanificationViewBl;
 import bo.ucb.edu.smartcalendar.bl.SpaceBl;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 
@@ -15,7 +14,7 @@ import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 @RequestMapping(value = "api/v1/space")
 public class SpaceAPI {
 
-    Logger LOGGER = LoggerFactory.getLogger(PlanificationViewBl.class);
+    Logger LOGGER = LoggerFactory.getLogger(SpaceAPI.class);
     
     @Autowired
     private SpaceBl spaceBl;

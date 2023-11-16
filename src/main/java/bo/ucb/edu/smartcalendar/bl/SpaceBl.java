@@ -17,7 +17,7 @@ import bo.ucb.edu.smartcalendar.repository.SpaceRepository;
 @Service
 public class SpaceBl {
 
-    Logger LOGGER = LoggerFactory.getLogger(PlanificationViewBl.class);
+    Logger LOGGER = LoggerFactory.getLogger(SpaceBl.class);
     
     @Autowired
     private SpaceRepository spaceRepository;
