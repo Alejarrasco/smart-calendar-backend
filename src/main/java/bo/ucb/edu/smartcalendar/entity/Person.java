@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -17,6 +19,13 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int personId;
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_group",
+        joinColumns = @jakarta.persistence.JoinColumn(name = "person_id"),
+        inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "group_id")
+    )
 
     @Column(name = "first_name", length = 100, nullable = false)
     private String firstName;
