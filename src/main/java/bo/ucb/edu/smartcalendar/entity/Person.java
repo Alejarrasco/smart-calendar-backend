@@ -26,6 +26,7 @@ public class Person {
         joinColumns = @jakarta.persistence.JoinColumn(name = "person_id"),
         inverseJoinColumns = @jakarta.persistence.JoinColumn(name = "group_id")
     )
+    private Set<Group> groups;
 
     @Column(name = "first_name", length = 100, nullable = false)
     private String firstName;
