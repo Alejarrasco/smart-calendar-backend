@@ -52,16 +52,28 @@ public class PlanificationViewBl {
 
         //Group by weekday, then period_id
         Weekday[] weekdays = Weekday.values();
-        List<Period> periods = periodRepository.findAll();
         HashMap<Weekday, HashMap<String, Planification>> assignationsGroupedByDayAndPeriod = new HashMap<Weekday, HashMap<String, Planification>>();
         for(Weekday weekday : weekdays){
             HashMap<String, Planification> thisDayAssignations = new HashMap<String, Planification>();
-            for(Period period : periods){
+            List<Period> periodsInThisDay = periodRepository.findByWeekday(weekday);
+            for(Period period : periodsInThisDay){
+                boolean found = false;
                 for(Planification assignation : thisWeekAssignations){
+                    //LOGGER.info("assignation weekday: " + assignation.getWeekDay().toString());
+                    //LOGGER.info("assignation period: " + assignation.getPeriodId());
+                    //LOGGER.info(weekday.toString() + " " + period.getPeriodId());
                     if(assignation.getWeekDay() == weekday && assignation.getPeriodId() == period.getPeriodId()){
+                        //LOGGER.info("placing assignation: " + assignation.getWeekDay().toString()+ assignation.getPeriodId() + " in weekday: " + weekday + " and period: " + period.getPeriodId());
                         thisDayAssignations.put(period.getStartTime().toString(), assignation);
+                        found = true;
+                        break;
                         //TODO si hay choque de horarios este valor se sobrescribe, manejar esta excepción
-                    }
+                        //TODO hay alguna manera más simple de hacer esto?
+                    } 
+                }
+                if(!found){
+                    //LOGGER.info("placing null in weekday: " + weekday + " and period: " + period.getPeriodId());
+                    thisDayAssignations.put(period.getStartTime().toString(), null);
                 }
             }
             assignationsGroupedByDayAndPeriod.put(weekday, thisDayAssignations);
