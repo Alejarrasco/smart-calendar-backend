@@ -1,5 +1,6 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.sql.Date;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -40,6 +41,16 @@ public class Space {
 
     @OneToMany(mappedBy = "space")
     private Set<Schedule> schedules;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser;
 
 
     // Constructor de la clase Space.java

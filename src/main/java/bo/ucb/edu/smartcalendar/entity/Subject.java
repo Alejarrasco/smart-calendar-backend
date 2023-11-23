@@ -1,5 +1,6 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.sql.Date;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -34,11 +35,24 @@ public class Subject {
     @Column(name = "subject_code", length = 50, nullable = false, unique = true)
     private String subjectCode;
 
+    @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "subject_status", nullable = false)
+    private boolean subjectStatus;
+
     @OneToMany(mappedBy = "subject")
     private Set<Responsible> responsibles;
 
     @OneToMany(mappedBy = "subject")
     private Set<Solicitude> solicitudes;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser;
 
 
     // Constructor de la clase Subject.java
@@ -97,10 +111,12 @@ public class Subject {
         return solicitudes;
     }
 
-    public void setSolicitudes(Set<Solicitude> solicitudes) {
-        this.solicitudes = solicitudes;
+    public boolean isSubjectStatus() {
+        return subjectStatus;
     }
 
-    
+    public void setSubjectStatus(boolean subjectStatus) {
+        this.subjectStatus = subjectStatus;
+    }
 
 }

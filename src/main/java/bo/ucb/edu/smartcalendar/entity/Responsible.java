@@ -1,5 +1,7 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,19 @@ public class Responsible {
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
+
+    @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "responsible_status", nullable = false)
+    private boolean responsibleStatus;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser;
 
 
     // Constructor de la clase Responsible.java
@@ -61,5 +76,11 @@ public class Responsible {
         this.subject = subject;
     }
 
-    
+    public boolean isResponsibleStatus() {
+        return responsibleStatus;
+    }
+
+    public void setResponsibleStatus(boolean responsibleStatus) {
+        this.responsibleStatus = responsibleStatus;
+    }
 }

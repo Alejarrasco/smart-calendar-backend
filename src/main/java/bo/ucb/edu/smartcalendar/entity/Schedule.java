@@ -38,8 +38,21 @@ public class Schedule {
     @Column(name = "close_date", nullable = false)
     private Date closeDate;
 
+    @Column(columnDefinition = "bit(1) DEFAULT 1",name = "schedule_status", nullable = false)
+    private boolean scheduleStatus;
+
     @OneToMany(mappedBy = "schedule")
     private Set<Assignation> assignations;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser;
 
 
     // Constructor de la clase Schedule.java
@@ -94,5 +107,17 @@ public class Schedule {
 
     public void setCloseDate(Date closeDate) {
         this.closeDate = closeDate;
+    }
+
+    public boolean isScheduleStatus() {
+        return scheduleStatus;
+    }
+
+    public void setScheduleStatus(boolean scheduleStatus) {
+        this.scheduleStatus = scheduleStatus;
+    }
+
+    public Set<Assignation> getAssignations() {
+        return assignations;
     }
 }

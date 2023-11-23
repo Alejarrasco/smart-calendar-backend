@@ -50,7 +50,16 @@ public class Solicitude {
 
     @OneToMany(mappedBy = "solicitude")
     private Set<Assignation> assignations;
+    
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate;
 
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost;
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser;
 
     // Constructor de la clase Solicitude.java
     public Solicitude() {
@@ -134,6 +143,10 @@ public class Solicitude {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public Set<Assignation> getAssignations() {
+        return assignations;
     }
 
 
