@@ -22,8 +22,12 @@ public class SpaceBl {
     @Autowired
     private SpaceRepository spaceRepository;
 
-    public SpaceBl(SpaceRepository spaceRepository) {
+    @Autowired
+    private ScheduleBl scheduleBl;
+
+    public SpaceBl(SpaceRepository spaceRepository, ScheduleBl scheduleBl) {
         this.spaceRepository = spaceRepository;
+        this.scheduleBl = scheduleBl;
     }
 
     public SmartcalResponse ListSpacesGroupedByType(){
@@ -48,6 +52,25 @@ public class SpaceBl {
             LOGGER.error("Space not found");
             throw new RuntimeException("Space not found");
         }
+        LOGGER.info("Space: " + space);
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(space);
+        return response;
+    }
+
+    public SmartcalResponse CloseSpace(Integer space_id) throws RuntimeException{
+        Space space = spaceRepository.findById(space_id).orElse(null);
+        if (space == null) {
+            LOGGER.error("Space not found");
+            throw new RuntimeException("Space not found");
+        }
+        try {
+            scheduleBl.CloseScheduleBySpaceId(space_id);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        space.setSpaceStatus(Space.SpaceStatus.CLOSED);
+        spaceRepository.save(space);
         LOGGER.info("Space: " + space);
         SmartcalResponse response = new SmartcalResponse();
         response.setData(space);

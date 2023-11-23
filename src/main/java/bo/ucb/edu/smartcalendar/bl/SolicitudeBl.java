@@ -76,4 +76,73 @@ public class SolicitudeBl {
         return response;
     }
 
+    public SmartcalResponse GetSolicitudes(Integer personId){
+        LOGGER.info("Getting solicitudes for person id: " + personId);
+
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(solicitudeRepository.findByPersonId(personId));
+        if (response.getData() == null){
+            throw new RuntimeException("No solicitudes found for person id: " + personId);
+        }
+        return response;
+    }
+
+    public SmartcalResponse ApproveSolicitude(Integer token, Integer solicitudeId){
+        LOGGER.info("Approving solicitude id: " + solicitudeId);
+
+        Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
+        if (solicitude == null){
+            throw new RuntimeException("No solicitude found for id: " + solicitudeId);
+        }
+        solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.APPROVED);
+        solicitudeRepository.save(solicitude);
+
+        for (Assignation assignation : solicitude.getAssignations()){
+            assignation.setApproveDate(new Date(System.currentTimeMillis()));
+            assignationRepository.save(assignation);
+        }
+
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(solicitude);
+        return response;
+    }
+
+    public SmartcalResponse RejectSolicitude(Integer token, Integer solicitudeId){
+        LOGGER.info("Rejecting solicitude id: " + solicitudeId);
+
+        Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
+        if (solicitude == null){
+            throw new RuntimeException("No solicitude found for id: " + solicitudeId);
+        }
+        solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.REJECTED);
+        solicitudeRepository.save(solicitude);
+
+        for (Assignation assignation : solicitude.getAssignations()){
+            assignationRepository.delete(assignation);
+        }
+
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(solicitude);
+        return response;
+    }
+
+    public SmartcalResponse CancelSolicitude(Integer token, Integer solicitudeId){
+        LOGGER.info("Cancelling solicitude id: " + solicitudeId);
+
+        Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
+        if (solicitude == null){
+            throw new RuntimeException("No solicitude found for id: " + solicitudeId);
+        }
+        solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.CANCELED);
+        solicitudeRepository.save(solicitude);
+
+        for (Assignation assignation : solicitude.getAssignations()){
+            assignationRepository.delete(assignation);
+        }
+
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(solicitude);
+        return response;
+    }
+
 }
