@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +42,20 @@ public class SpaceAPI {
         } catch (RuntimeException e) {
             response.setCode("SPAC-6001");
             response.setErrormessage("No se encontró el espacio especificado");
+        }
+        return response;
+    }
+
+    @PutMapping("{space_id}/closed")
+    public SmartcalResponse CloseSpace(Integer space_id){
+        LOGGER.info("Called CloseSpace");
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            response = spaceBl.CloseSpace(space_id);
+            response.setCode("SPAC-0002");
+        } catch (RuntimeException e) {
+            response.setCode("SPAC-6002");
+            response.setErrormessage("No se pudo cerrar el espacio");
         }
         return response;
     }
