@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import bo.ucb.edu.smartcalendar.api.SubjectAPI;
+import bo.ucb.edu.smartcalendar.dto.RequirementRequest;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.dto.SubjectRequest;
 import bo.ucb.edu.smartcalendar.dto.SubjectResponse;
@@ -93,6 +93,10 @@ public class SubjectBl {
         
         response.setData(subject);
         return response;
+    }
+
+    public SmartcalResponse AddRequirement(RequirementRequest requirementRequest){
+        return requirementBl.AddRequirement(requirementRequest);
     }
 
 

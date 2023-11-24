@@ -18,7 +18,7 @@ Content-Type: application/json
             "subjectCode": "CHEM",
             "periodsPerClass": 2,
             "periodsPerWeek": 2,
-            "spaceType": "LABORATORY",
+            "spaceType": "Laboratorio",
             "maxAlumni": 20,
             "semester": "FIRST"
         }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import bo.ucb.edu.smartcalendar.bl.SubjectBl;
+import bo.ucb.edu.smartcalendar.dto.RequirementRequest;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.dto.SubjectRequest;
 
@@ -43,9 +44,26 @@ public class SubjectAPI {
             response.setCode("SUBJ-0001");
         } catch (Exception e) {
             LOGGER.error("Error creating subject: " + e.getMessage());
-            response.setCode("SUBJ-0002");
+            response.setCode("SUBJ-6001");
+            response.setErrormessage("Error creating subject\n" + e.getMessage());
             e.printStackTrace();
         }
         return response;
     }
+
+    @PostMapping(path = "/requirement")
+    public SmartcalResponse AddRequirement(@RequestBody RequirementRequest requirementRequest){
+        LOGGER.info("Called AddRequirement");
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            response = subjectBl.AddRequirement(requirementRequest);
+            response.setCode("SUBJ-0003");
+        } catch (Exception e) {
+            LOGGER.error("Error adding requirement: " + e.getMessage());
+            response.setCode("SUBJ-6003");
+            response.setErrormessage("Error adding requirement\n" + e.getMessage());
+        }
+        return response;
+    }
+
 }

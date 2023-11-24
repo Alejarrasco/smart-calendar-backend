@@ -73,4 +73,12 @@ public class RequirementRequest {
         this.semester = semester;
     }
     
+    @Override
+    public String toString() {
+        return "Requirement for "+ subjectCode +": \n"+
+        "-> Periods per class: "+periodsPerClass+"\n"+
+        "-> Classes per week: "+classesPerWeek+"\n"+
+        "-> Space type: "+spaceType+"\n"+
+        "-> Max alumni: "+maxAlumni;
+    }
 }

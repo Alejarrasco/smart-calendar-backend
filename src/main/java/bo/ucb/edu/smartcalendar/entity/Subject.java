@@ -119,4 +119,9 @@ public class Subject {
         this.subjectStatus = subjectStatus;
     }
 
+    @Override
+    public String toString() {
+        return "Subject No "+ subjectId +" "+ subjectName + " coded "+ subjectCode + " from faculty "+ faculty.getFacultyName();
+    }
+
 }
