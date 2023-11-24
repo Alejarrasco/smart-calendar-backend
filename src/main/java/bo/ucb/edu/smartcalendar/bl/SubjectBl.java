@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import bo.ucb.edu.smartcalendar.api.SubjectAPI;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
+import bo.ucb.edu.smartcalendar.dto.SubjectRequest;
 import bo.ucb.edu.smartcalendar.dto.SubjectResponse;
+import bo.ucb.edu.smartcalendar.entity.Requirement;
 import bo.ucb.edu.smartcalendar.entity.Responsible;
 import bo.ucb.edu.smartcalendar.entity.Subject;
 import bo.ucb.edu.smartcalendar.repository.FacultyRepository;
@@ -21,7 +23,7 @@ import bo.ucb.edu.smartcalendar.repository.SubjectRepository;
 @Service
 public class SubjectBl {
     
-    Logger LOGGER = LoggerFactory.getLogger(SubjectAPI.class);
+    Logger LOGGER = LoggerFactory.getLogger(SubjectBl.class);
 
     @Autowired
     private SubjectRepository subjectRepository;
@@ -29,9 +31,17 @@ public class SubjectBl {
     @Autowired
     private FacultyRepository facultyRepository;
 
-    public SubjectBl(SubjectRepository subjectRepository, FacultyRepository facultyRepository) {
+    @Autowired
+    private PersonBl personBl;
+
+    @Autowired
+    private RequirementBl requirementBl;
+
+    public SubjectBl(SubjectRepository subjectRepository, FacultyRepository facultyRepository, PersonBl personBl, RequirementBl requirementBl) {
         this.subjectRepository = subjectRepository;
         this.facultyRepository = facultyRepository;
+        this.personBl = personBl;
+        this.requirementBl = requirementBl;
     }
 
     public SmartcalResponse ListSubjects(){
@@ -56,5 +66,35 @@ public class SubjectBl {
         response.setData(subjectsResponse);
         return response;
     }
+
+    public SmartcalResponse CreateSubject(SubjectRequest subjectRequest){
+        LOGGER.info("Called CreateSubject");
+        Subject subject = new Subject();
+        SmartcalResponse response = new SmartcalResponse();
+
+        subject.setSubjectName(subjectRequest.getSubjectName());
+        subject.setSubjectCode(subjectRequest.getSubjectCode());
+        subject.setFaculty(facultyRepository.findByFacultyName(subjectRequest.getFacultyName()));
+        subject.setSubjectDescription(subjectRequest.getSubjectDescription());
+        subjectRepository.save(subject);
+        try {
+            personBl.CreateResponsibles(subjectRequest.getResponsiblesIds(), subject);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        if (subjectRequest.getRequirements() != null) {
+            try {
+                requirementBl.CreateRequirements(subjectRequest.getRequirements(), subject);
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        }
+
+        
+        response.setData(subject);
+        return response;
+    }
+
+
         
 }

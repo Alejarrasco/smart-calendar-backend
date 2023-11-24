@@ -36,7 +36,7 @@ public class Subject {
     private String subjectCode;
 
     @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "subject_status", nullable = false)
-    private boolean subjectStatus;
+    private boolean subjectStatus = true;
 
     @OneToMany(mappedBy = "subject")
     private Set<Responsible> responsibles;
@@ -45,14 +45,14 @@ public class Subject {
     private Set<Solicitude> solicitudes;
 
     //Aud fields
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
-    private Date audDate;
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date")
+    private Date audDate = new Date(System.currentTimeMillis());
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
-    private String audHost;
+    private String audHost = "localhost";
 
-    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
-    private String audUser;
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false)
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Subject.java

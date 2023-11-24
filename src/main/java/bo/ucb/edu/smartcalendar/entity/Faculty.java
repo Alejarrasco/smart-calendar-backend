@@ -19,7 +19,7 @@ public class Faculty {
     @Column(name = "faculty_id")
     private int facultyId;
 
-    @Column(name = "faculty_name", length = 100, nullable = false)
+    @Column(name = "faculty_name", length = 100, nullable = false, unique = true)
     private String facultyName;
 
     @OneToMany(mappedBy = "faculty")

@@ -158,5 +158,14 @@ public class Space {
         public String getDisplayName() {
             return displayName;
         }
+
+        public static SpaceType fromDisplayName(String displayName) {
+            for (SpaceType b : SpaceType.values()) {
+                if (b.displayName.equals(displayName)) {
+                    return b;
+                }
+            }
+            return null;
+        }
     }
 }

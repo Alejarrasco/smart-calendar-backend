@@ -29,17 +29,17 @@ public class Responsible {
     private Subject subject;
 
     @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "responsible_status", nullable = false)
-    private boolean responsibleStatus;
+    private boolean responsibleStatus = true;
 
     //Aud fields
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
-    private Date audDate;
+    private Date audDate = new Date(System.currentTimeMillis());
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
-    private String audHost;
+    private String audHost = "localhost";
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
-    private String audUser;
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Responsible.java
@@ -82,5 +82,10 @@ public class Responsible {
 
     public void setResponsibleStatus(boolean responsibleStatus) {
         this.responsibleStatus = responsibleStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Responsible: "+person.getFirstName()+" "+person.getLastName()+" on "+subject.getSubjectName();
     }
 }

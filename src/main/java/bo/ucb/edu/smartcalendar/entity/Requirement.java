@@ -138,4 +138,13 @@ public class Requirement {
     public void setRequirementStatus(boolean requirementStatus) {
         this.requirementStatus = requirementStatus;
     }
+
+    @Override
+    public String toString() {
+        return "\nRequirementNo"+requirementId+" for "+subject.getSubjectName()+" on "+semester+"\n"+
+        "-> Periods per class: "+periodsPerClass+"\n"+
+        "-> Classes per week: "+classesPerWeek+"\n"+
+        "-> Space type: "+spaceType+"\n"+
+        "-> Max alumni: "+maxAlumni;
+    }
 }
