@@ -38,8 +38,12 @@ public class PersonBl {
         this.roleRepository = roleRepository;
     }
 
-    //TODO
-    // public SmartcalResponse ListPersons(){}
+    public SmartcalResponse ListPersons(){
+        LOGGER.info("Called ListPersons");
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(personRepository.findAll());
+        return response;
+    }
 
 
     //TODO
