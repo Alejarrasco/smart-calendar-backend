@@ -39,20 +39,20 @@ public class Schedule {
     private Date closeDate;
 
     @Column(columnDefinition = "bit(1) DEFAULT 1",name = "schedule_status", nullable = false)
-    private boolean scheduleStatus;
+    private boolean scheduleStatus = true;
 
     @OneToMany(mappedBy = "schedule")
     private Set<Assignation> assignations;
 
     //Aud fields
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
-    private Date audDate;
+    private Date audDate = new Date(System.currentTimeMillis());
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
-    private String audHost;
+    private String audHost = "localhost";
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
-    private String audUser;
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Schedule.java

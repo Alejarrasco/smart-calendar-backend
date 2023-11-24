@@ -35,17 +35,17 @@ public class Assignation {
     private boolean aiGenerated;
 
     @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "assignation_status", nullable = false)
-    private boolean assignationStatus;
+    private boolean assignationStatus = true;
 
     //Aud fields
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
-    private Date audDate;
+    private Date audDate = new Date(System.currentTimeMillis());
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
-    private String audHost;
+    private String audHost = "localhost";
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
-    private String audUser;
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Assignation.java

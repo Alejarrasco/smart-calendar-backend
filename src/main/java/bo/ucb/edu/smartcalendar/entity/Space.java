@@ -30,7 +30,7 @@ public class Space {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "space_status", nullable = false)
-    private SpaceStatus spaceStatus;
+    private SpaceStatus spaceStatus = SpaceStatus.OPEN;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "space_type", nullable = false)
@@ -44,13 +44,13 @@ public class Space {
 
     //Aud fields
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
-    private Date audDate;
+    private Date audDate = new Date(System.currentTimeMillis());
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
-    private String audHost;
+    private String audHost = "localhost";
 
     @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
-    private String audUser;
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Space.java
