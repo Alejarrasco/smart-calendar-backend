@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ public class SpaceAPI {
     }
 
     @GetMapping(path = "/{id}")
-    public SmartcalResponse FindSpaceById(Integer id){
+    public SmartcalResponse FindSpaceById(@PathVariable Integer id){
         LOGGER.info("Called FindSpaceById");
         SmartcalResponse response = new SmartcalResponse();
         try {
@@ -41,7 +42,7 @@ public class SpaceAPI {
             response.setCode("SPAC-0001");
         } catch (RuntimeException e) {
             response.setCode("SPAC-6001");
-            response.setErrormessage("No se encontró el espacio especificado");
+            response.setErrormessage(e.getMessage());
         }
         return response;
     }

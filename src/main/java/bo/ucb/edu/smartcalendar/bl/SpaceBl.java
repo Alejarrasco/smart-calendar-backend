@@ -36,9 +36,15 @@ public class SpaceBl {
         LOGGER.info("Space types: " + spaceTypes);
 
         for(SpaceType spaceType : spaceTypes){
-            List<Space> spacesOfType = spaceRepository.findBySpaceType(spaceType);
-            LOGGER.info("Spaces of type " + spaceType + ": " + spacesOfType);
-            spacesGroupedByType.put(spaceType, spacesOfType);
+            LOGGER.info("Space type: " + spaceType);
+            try { //FIXME jdbcMapping is null
+                List<Space> spacesOfType = spaceRepository.findBySpaceType(spaceType);
+                LOGGER.info("Spaces of type " + spaceType + ": " + spacesOfType);
+                spacesGroupedByType.put(spaceType, spacesOfType);
+            } catch (Exception e) {
+                LOGGER.error("Error: " + e);
+                spacesGroupedByType.put(spaceType, null);
+            }
         }
         
         SmartcalResponse response = new SmartcalResponse();

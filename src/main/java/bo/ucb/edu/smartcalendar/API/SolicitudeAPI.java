@@ -28,7 +28,7 @@ public class SolicitudeAPI {
         this.solicitudeBl = solicitudeBl;
     }
 
-    @GetMapping()
+    @GetMapping() //FIXME is returning a StackOverflowError
     public SmartcalResponse GetSolicitudes(@RequestHeader Integer token){
         LOGGER.info("Get solicitudes");
         SmartcalResponse response = new SmartcalResponse();
