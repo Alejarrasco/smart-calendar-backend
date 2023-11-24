@@ -1,0 +1,16 @@
+DROP TRIGGER after_assignation_insert;
+DROP TRIGGER after_assignation_update;
+DROP TRIGGER after_calendar_access_insert;
+DROP TRIGGER after_calendar_access_update;
+DROP TRIGGER after_requirement_update;
+DROP TRIGGER after_responsible_insert;
+DROP TRIGGER after_responsible_update;
+DROP TRIGGER after_schedule_insert; 
+DROP TRIGGER after_schedule_update; 
+DROP TRIGGER after_solicitude_insert; 
+DROP TRIGGER after_solicitude_update; 
+DROP TRIGGER after_space_insert;
+DROP TRIGGER after_space_update;
+DROP TRIGGER after_subject_insert;
+DROP TRIGGER after_subject_update;
+DROP TRIGGER after_requirement_insert;

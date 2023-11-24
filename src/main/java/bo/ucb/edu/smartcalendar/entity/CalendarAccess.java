@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 public class CalendarAccess {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "calendar_access_id")
     private Integer calendarAccessId;
 

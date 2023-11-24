@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class Solicitude {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "solicitude_id")
     private int solicitudeId;
 

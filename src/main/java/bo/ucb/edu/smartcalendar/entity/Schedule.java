@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class Schedule {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "schedule_id")
     private int scheduleId;
 

@@ -17,10 +17,24 @@ Content-Type: application/json
         {
             "subjectCode": "CHEM",
             "periodsPerClass": 2,
-            "periodsPerWeek": 2,
+            "classesPerWeek": 2,
             "spaceType": "Laboratorio",
             "maxAlumni": 20,
             "semester": "FIRST"
         }
     ]
+}
+
+###
+POST http://localhost:8080/api/v1/subject/requirement
+Accept: application/json
+Content-Type: application/json
+
+{
+    "subjectCode": "CHEM",
+    "periodsPerClass": 2,
+    "classesPerWeek": 2,
+    "spaceType": "Laboratorio",
+    "maxAlumni": 20,
+    "semester": "FIRST"
 }

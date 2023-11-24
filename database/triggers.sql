@@ -56,6 +56,7 @@ END;
 
 -- Trigger for requirement table
 DELIMITER //
+DROP TRIGGER IF EXISTS after_requirement_insert;
 CREATE TRIGGER after_requirement_insert
 AFTER INSERT ON requirement
 FOR EACH ROW
@@ -67,6 +68,7 @@ BEGIN
         periods_per_class,
         semester, 
         space_type,  
+        subject_id,
         requirement_status,
         aud_date, 
         aud_host, 
@@ -77,7 +79,8 @@ BEGIN
         NEW.max_alumni,
         NEW.periods_per_class,
         NEW.semester, 
-        NEW.space_type,  
+        NEW.space_type,
+        NEW.subject_id,  
         NEW.requirement_status,
         NEW.aud_date, 
         NEW.aud_host, 
@@ -389,3 +392,5 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+SELECT Concat('DROP TRIGGER ', Trigger_Name, ';') FROM information_schema.TRIGGERS WHERE TRIGGER_SCHEMA = 'smart_calendar';

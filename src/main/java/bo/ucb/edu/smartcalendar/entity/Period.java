@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 public class Period {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "period_id")
     private int periodId;
 

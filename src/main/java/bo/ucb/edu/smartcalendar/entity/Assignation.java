@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 public class Assignation {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "assignation_id")
     private int assignationId;
 

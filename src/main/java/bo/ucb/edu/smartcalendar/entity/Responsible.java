@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 public class Responsible {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "responsible_id")
     private int responsibleId;
 

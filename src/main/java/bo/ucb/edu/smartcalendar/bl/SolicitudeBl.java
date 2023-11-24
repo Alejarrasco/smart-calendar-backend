@@ -80,9 +80,13 @@ public class SolicitudeBl {
         LOGGER.info("Getting solicitudes for person id: " + personId);
 
         SmartcalResponse response = new SmartcalResponse();
-        response.setData(solicitudeRepository.findByPersonId(personId));
-        if (response.getData() == null){
-            throw new RuntimeException("No solicitudes found for person id: " + personId);
+        try {
+            response.setData(solicitudeRepository.findByPersonId(personId));
+            if (response.getData() == null){
+                throw new RuntimeException("No solicitudes found for person id: " + personId);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error getting solicitudes for person id: " + personId);
         }
         return response;
     }

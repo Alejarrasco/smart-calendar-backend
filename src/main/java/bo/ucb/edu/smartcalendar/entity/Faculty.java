@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class Faculty {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "faculty_id")
     private int facultyId;
 

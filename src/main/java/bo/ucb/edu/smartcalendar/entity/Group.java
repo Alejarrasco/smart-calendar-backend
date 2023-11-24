@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 public class Group {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "group_id")
     private Integer groupId;
 
