@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bo.ucb.edu.smartcalendar.bl.SubjectBl;
 import bo.ucb.edu.smartcalendar.dto.RequirementRequest;
+import bo.ucb.edu.smartcalendar.dto.ResponsibleRequest;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.dto.SubjectRequest;
 
@@ -62,6 +63,20 @@ public class SubjectAPI {
             LOGGER.error("Error adding requirement: " + e.getMessage());
             response.setCode("SUBJ-6003");
             response.setErrormessage("Error adding requirement\n" + e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping(path = "/responsibles")
+    public SmartcalResponse AssignResponsibles(@RequestBody ResponsibleRequest responsibleRequest){
+        LOGGER.info("Called CreateResponsibles");
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            response = subjectBl.AssignResponsibles(responsibleRequest);
+            response.setCode("SUBJ-0004");
+        } catch (RuntimeException e) {
+            response.setCode("SUBJ-6004");
+            response.setErrormessage(e.getMessage());
         }
         return response;
     }

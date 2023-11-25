@@ -1,6 +1,7 @@
 package bo.ucb.edu.smartcalendar.bl;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,8 +101,8 @@ public class SolicitudeBl {
         }
         solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.APPROVED);
         solicitudeRepository.save(solicitude);
-
-        for (Assignation assignation : solicitude.getAssignations()){
+        List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitudeId);
+        for (Assignation assignation : assignations){
             assignation.setApproveDate(new Date(System.currentTimeMillis()));
             assignationRepository.save(assignation);
         }
@@ -121,7 +122,8 @@ public class SolicitudeBl {
         solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.REJECTED);
         solicitudeRepository.save(solicitude);
 
-        for (Assignation assignation : solicitude.getAssignations()){
+        List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitudeId);
+        for (Assignation assignation : assignations){
             assignationRepository.delete(assignation);
         }
 
@@ -140,7 +142,8 @@ public class SolicitudeBl {
         solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.CANCELED);
         solicitudeRepository.save(solicitude);
 
-        for (Assignation assignation : solicitude.getAssignations()){
+        List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitudeId);
+        for (Assignation assignation : assignations){
             assignationRepository.delete(assignation);
         }
 

@@ -1,9 +1,9 @@
 package bo.ucb.edu.smartcalendar.bl;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,7 @@ import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.entity.Assignation;
 import bo.ucb.edu.smartcalendar.entity.Period;
 import bo.ucb.edu.smartcalendar.entity.Schedule;
+import bo.ucb.edu.smartcalendar.entity.Space;
 import bo.ucb.edu.smartcalendar.entity.Period.Weekday;
 import bo.ucb.edu.smartcalendar.repository.AssignationRepository;
 import bo.ucb.edu.smartcalendar.repository.PeriodRepository;
@@ -56,10 +57,30 @@ public class ScheduleBl {
         
     }
 
+    public void CreateSchedule(Integer[] period_ids, Space space, Date open_date, Date close_date){
+        LOGGER.info("Creating schedule");
+        for(Integer period_id : period_ids){
+            Period period = periodRepository.findById(period_id).orElse(null);
+            if (period == null) {
+                LOGGER.error("Period with id " + period_id + " not found");
+                throw new RuntimeException("Period with id " + period_id + " not found");
+            }
+            Schedule schedule = new Schedule();
+            schedule.setPeriod(period);
+            schedule.setSpace(space);
+            schedule.setOpenDate(open_date);
+            schedule.setCloseDate(close_date);
+            schedule.setScheduleStatus(true);
+            scheduleRepository.save(schedule);
+        }
+    }
+
+        
+
     public SmartcalResponse CloseScheduleBySpaceId(Integer space_id){
         LOGGER.info("Closing schedule of space with id " + space_id);
         Schedule schedule = scheduleRepository.findBySpaceId(space_id);
-        Set<Assignation> assignations = schedule.getAssignations();
+        List<Assignation> assignations = assignationRepository.findByScheduleId(schedule.getScheduleId());
         for(Assignation assignation : assignations){
             //Set status of assignation to false
             assignation.setAssignationStatus(false);

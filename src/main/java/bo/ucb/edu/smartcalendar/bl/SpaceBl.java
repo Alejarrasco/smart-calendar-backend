@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
+import bo.ucb.edu.smartcalendar.dto.SpaceRequest;
 import bo.ucb.edu.smartcalendar.entity.Space;
 import bo.ucb.edu.smartcalendar.entity.Space.SpaceType;
 import bo.ucb.edu.smartcalendar.repository.SpaceRepository;
@@ -67,6 +68,27 @@ public class SpaceBl {
             throw new RuntimeException("Space not found");
         }
         LOGGER.info("Space: " + space);
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(space);
+        return response;
+    }
+
+    public SmartcalResponse CreateSpace(SpaceRequest spaceRequest){
+        Space space = new Space();
+        space.setSpaceName(spaceRequest.getSpaceName());
+        space.setSpaceDescription(spaceRequest.getSpaceDescription());
+        space.setSpaceType(SpaceType.valueOf(spaceRequest.getSpaceType()));
+        space.setCapacity(spaceRequest.getCapacity());
+        space.setSpaceStatus(Space.SpaceStatus.OPEN);
+        spaceRepository.save(space);
+        LOGGER.info("Space: " + space);
+        try {
+            scheduleBl.CreateSchedule(spaceRequest.getPeriodIds(), space, spaceRequest.getOpenDate(), spaceRequest.getCloseDate());
+        } catch (RuntimeException e) {
+            LOGGER.error("Error: " + e);
+            spaceRepository.delete(space);
+            throw new RuntimeException("Error creating schedule for space "+ spaceRequest.getSpaceName());
+        }
         SmartcalResponse response = new SmartcalResponse();
         response.setData(space);
         return response;

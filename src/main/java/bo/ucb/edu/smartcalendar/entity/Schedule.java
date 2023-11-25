@@ -116,8 +116,4 @@ public class Schedule {
     public void setScheduleStatus(boolean scheduleStatus) {
         this.scheduleStatus = scheduleStatus;
     }
-
-    public Set<Assignation> getAssignations() {
-        return assignations;
-    }
 }

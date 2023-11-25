@@ -145,10 +145,6 @@ public class Solicitude {
         this.endDate = endDate;
     }
 
-    public Set<Assignation> getAssignations() {
-        return assignations;
-    }
-
 
     //enum para el estado de la solicitud
     public enum SolicitudeStatus {

@@ -168,4 +168,13 @@ public class Space {
             return null;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Space: "+ spaceName+ "\n"+
+        "Description: "+ spaceDescription+ "\n"+
+        "Status: "+ spaceStatus+ "\n"+
+        "Type: "+ spaceType+ "\n"+
+        "Capacity: "+ capacity+ "\n";
+    }
 }

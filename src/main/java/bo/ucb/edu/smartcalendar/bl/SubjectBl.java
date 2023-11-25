@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.ucb.edu.smartcalendar.dto.RequirementRequest;
+import bo.ucb.edu.smartcalendar.dto.ResponsibleRequest;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.dto.SubjectRequest;
 import bo.ucb.edu.smartcalendar.dto.SubjectResponse;
-import bo.ucb.edu.smartcalendar.entity.Requirement;
 import bo.ucb.edu.smartcalendar.entity.Responsible;
 import bo.ucb.edu.smartcalendar.entity.Subject;
 import bo.ucb.edu.smartcalendar.repository.FacultyRepository;
@@ -98,6 +98,19 @@ public class SubjectBl {
 
     public SmartcalResponse AddRequirement(RequirementRequest requirementRequest){
         return requirementBl.AddRequirement(requirementRequest);
+    }
+
+    public SmartcalResponse AssignResponsibles(ResponsibleRequest responsibleRequest){
+        LOGGER.info("Called AssignResponsibles");
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            personBl.CreateResponsibles(responsibleRequest.getPersonsIds(), subjectRepository.findByCode(responsibleRequest.getSubjectCode()));
+            response.setData(subjectRepository.findByCode(responsibleRequest.getSubjectCode()));
+        } catch (RuntimeException e) {
+            LOGGER.error("Error assigning responsibles: " + e.getMessage());
+            throw new RuntimeException("Error assigning responsibles: " + e.getMessage());
+        }
+        return response;
     }
 
 
