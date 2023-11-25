@@ -38,6 +38,7 @@ public class SolicitudeAPI {
         } catch (Exception e) {
             response.setCode("SOLI-6000");
             response.setErrormessage(e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }
@@ -54,6 +55,7 @@ public class SolicitudeAPI {
         } catch (Exception e) {
             response.setCode("SOLI-6001");
             response.setErrormessage(e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }

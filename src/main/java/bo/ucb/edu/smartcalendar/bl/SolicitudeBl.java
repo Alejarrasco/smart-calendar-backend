@@ -51,8 +51,10 @@ public class SolicitudeBl {
         Solicitude solicitude = new Solicitude();
         solicitude.setSubject(subjectRepository.findByCode(solicitudeRequest.getSubjectCode()));
         solicitude.setPerson(personRepository.findByPersonId(solicitudeRequest.getPersonId()));
+        solicitude.setRegisterDate(new Date(System.currentTimeMillis()));
         solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.PENDING);
         solicitude.setRecurrent(solicitudeRequest.isRecurrent());
+        LOGGER.debug("Date range: " + Date.valueOf(solicitudeRequest.getStartDate()) + " - " + Date.valueOf(solicitudeRequest.getEndDate()));
         solicitude.setStartDate(Date.valueOf(solicitudeRequest.getStartDate()));
         if (solicitudeRequest.isRecurrent()){
             solicitude.setEndDate(Date.valueOf(solicitudeRequest.getEndDate()));

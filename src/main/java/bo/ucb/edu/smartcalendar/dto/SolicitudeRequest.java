@@ -70,4 +70,13 @@ public class SolicitudeRequest {
     public void setSpaceId(Integer spaceId) {
         this.spaceId = spaceId;
     }
+
+    @Override
+    public String toString() {
+        if (recurrent){
+            return "Requesting solicitude for subject "+subjectCode+" by person "+personId+" from "+startDate+" to "+endDate+" in space "+spaceId+" for periods "+periods;
+        } else {
+            return "Requesting solicitude for subject "+subjectCode+" by person "+personId+" on "+startDate+" in space "+spaceId+" for periods "+periods;
+        }
+    }
 }

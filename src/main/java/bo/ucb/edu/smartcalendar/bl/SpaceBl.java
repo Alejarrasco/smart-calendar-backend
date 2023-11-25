@@ -77,7 +77,7 @@ public class SpaceBl {
         Space space = new Space();
         space.setSpaceName(spaceRequest.getSpaceName());
         space.setSpaceDescription(spaceRequest.getSpaceDescription());
-        space.setSpaceType(SpaceType.valueOf(spaceRequest.getSpaceType()));
+        space.setSpaceType(SpaceType.fromDisplayName(spaceRequest.getSpaceType())); 
         space.setCapacity(spaceRequest.getCapacity());
         space.setSpaceStatus(Space.SpaceStatus.OPEN);
         spaceRepository.save(space);
