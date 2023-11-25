@@ -99,18 +99,6 @@ public class Subject {
         this.subjectCode = subjectCode;
     }
 
-    public Set<Responsible> getResponsibles() {
-        return responsibles;
-    }
-
-    public void setResponsibles(Set<Responsible> responsibles) {
-        this.responsibles = responsibles;
-    }
-
-    public Set<Solicitude> getSolicitudes() {
-        return solicitudes;
-    }
-
     public boolean isSubjectStatus() {
         return subjectStatus;
     }

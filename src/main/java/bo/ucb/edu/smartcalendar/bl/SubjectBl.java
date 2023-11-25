@@ -55,8 +55,9 @@ public class SubjectBl {
             subjectResponse.setFacultyName(subject.getFaculty().getFacultyName());
             subjectResponse.setSubjectName(subject.getSubjectName());
             subjectResponse.setSubjectCode(subject.getSubjectCode());
+            List<Responsible> responsibles = personBl.ListResponsibles(subject.getSubjectId());
             Set<Integer> responsiblesIds = new HashSet<Integer>();
-            for (Responsible responsible : subject.getResponsibles()) {
+            for (Responsible responsible : responsibles) {
                 responsiblesIds.add(responsible.getPerson().getPersonId());
             }
             subjectResponse.setResponsiblesIds(responsiblesIds);

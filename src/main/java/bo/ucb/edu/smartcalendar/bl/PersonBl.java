@@ -1,11 +1,12 @@
 package bo.ucb.edu.smartcalendar.bl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import bo.ucb.edu.smartcalendar.api.SubjectAPI;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.entity.Responsible;
 import bo.ucb.edu.smartcalendar.entity.Subject;
@@ -45,9 +46,11 @@ public class PersonBl {
         return response;
     }
 
+    public List<Responsible> ListResponsibles(Integer subjectId){
+        LOGGER.info("Called ListResponsibles");
+        return responsibleRepository.findBySubjectId(subjectId);
 
-    //TODO
-    // public SmartcalResponse ListResponsibles(){}
+    }
     
 
     public void CreateResponsibles(Integer[] personsIds, Subject subject){

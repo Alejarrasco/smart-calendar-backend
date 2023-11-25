@@ -3,6 +3,7 @@ package bo.ucb.edu.smartcalendar.api;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +27,14 @@ public class PersonAPI {
     public SmartcalResponse ListPersons(){
         LOGGER.info("Called ListPersons");
         return personBl.ListPersons();
+    }
+
+    @GetMapping(path = "/responsibles/{subject_id}")
+    public SmartcalResponse ListResponsibles(@PathVariable("subject_id") Integer subjectId){
+        LOGGER.info("Called ListResponsibles");
+        SmartcalResponse response = new SmartcalResponse();
+        response.setCode("PERS-0010");
+        response.setData(personBl.ListResponsibles(subjectId));
+        return response;
     }
 }
