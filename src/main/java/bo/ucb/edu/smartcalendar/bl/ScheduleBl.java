@@ -57,21 +57,23 @@ public class ScheduleBl {
         
     }
 
-    public void CreateSchedule(Integer[] period_ids, Space space, Date open_date, Date close_date){
+    public void CreateSchedule(String[] period_times, Space space, Date open_date, Date close_date){
         LOGGER.info("Creating schedule");
-        for(Integer period_id : period_ids){
-            Period period = periodRepository.findById(period_id).orElse(null);
-            if (period == null) {
-                LOGGER.error("Period with id " + period_id + " not found");
-                throw new RuntimeException("Period with id " + period_id + " not found");
+        for(String period_start_time : period_times){
+            List<Period> periods = periodRepository.findByStartTime(period_start_time);
+            if (periods == null) {
+                LOGGER.error("Error: Periods not found");
+                throw new RuntimeException("Periods not found");
             }
-            Schedule schedule = new Schedule();
-            schedule.setPeriod(period);
-            schedule.setSpace(space);
-            schedule.setOpenDate(open_date);
-            schedule.setCloseDate(close_date);
-            schedule.setScheduleStatus(true);
-            scheduleRepository.save(schedule);
+            for(Period period : periods){
+                Schedule schedule = new Schedule();
+                schedule.setSpace(space);
+                schedule.setPeriod(period);
+                schedule.setOpenDate(open_date);
+                schedule.setCloseDate(close_date);
+                schedule.setScheduleStatus(true);
+                scheduleRepository.save(schedule);
+            }
         }
     }
 

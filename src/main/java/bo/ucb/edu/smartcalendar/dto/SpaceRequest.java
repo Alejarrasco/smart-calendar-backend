@@ -8,7 +8,7 @@ public class SpaceRequest {
     private String spaceDescription;
     private String spaceType;
     private int capacity;
-    private Integer[] periodIds;
+    private String[] periodTimes;
     private Date openDate;
     private Date closeDate;
 
@@ -47,12 +47,12 @@ public class SpaceRequest {
         this.capacity = capacity;
     }
 
-    public Integer[] getPeriodIds() {
-        return periodIds;
+    public String[] getPeriodTimes() {
+        return periodTimes;
     }
 
-    public void setPeriodIds(Integer[] periodIds) {
-        this.periodIds = periodIds;
+    public void setPeriodTimes(String[] periodTimes) {
+        this.periodTimes = periodTimes;
     }
 
     public Date getOpenDate() {

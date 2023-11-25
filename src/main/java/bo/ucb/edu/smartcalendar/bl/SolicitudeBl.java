@@ -64,14 +64,20 @@ public class SolicitudeBl {
         solicitudeRepository.save(solicitude);
 
         for (Integer periodId : solicitudeRequest.getPeriods()){
-            LOGGER.info("Filing for period id: " + periodId);
+            try {
+                LOGGER.info("Filing for period id: " + periodId);
 
-            Assignation assignation = new Assignation();
-            assignation.setSchedule(scheduleRepository.findByPeriodIdAndSpaceId(periodId, solicitudeRequest.getSpaceId()).get(0)); //TODO validate if space is open in schedule
-            assignation.setsolicitude(solicitude);
-            assignation.setApproveDate(null);
-            assignation.setAiGenerated(false);
-            assignationRepository.save(assignation);
+                Assignation assignation = new Assignation();
+                assignation.setSchedule(scheduleRepository.findByPeriodIdAndSpaceId(periodId, solicitudeRequest.getSpaceId()).get(0)); //TODO validate if space is open in schedule
+                assignation.setsolicitude(solicitude);
+                assignation.setApproveDate(null);
+                assignation.setAiGenerated(false);
+                assignationRepository.save(assignation);
+            } catch (Exception e) {
+                LOGGER.error("Error filing for period id: " + periodId + " under solicitude id: " + solicitude.getsolicitudeId());
+                solicitudeRepository.delete(solicitude);
+                throw new RuntimeException("Error filing for period id: " + periodId);
+            }
         }
 
         SmartcalResponse response = new SmartcalResponse();

@@ -12,11 +12,19 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "spaceName": "Labo 7",
-    "spaceDescription": "Laboratorio Nro 7",
+    "spaceName": "Labo 8",
+    "spaceDescription": "Laboratorio Nro 8",
     "spaceType": "Laboratorio",
     "capacity": 35,
-    "periodIds": [37, 38],
+    "periodTimes": [
+        "08:00:00",
+        "08:30:00",
+        "09:00:00",
+        "09:30:00",
+        "10:00:00",
+        "10:30:00",
+        "11:00:00"
+    ],
     "openDate": "2023-01-01",
     "closeDate": "2023-12-31"
 }

@@ -83,7 +83,7 @@ public class SpaceBl {
         spaceRepository.save(space);
         LOGGER.info("Space: " + space);
         try {
-            scheduleBl.CreateSchedule(spaceRequest.getPeriodIds(), space, spaceRequest.getOpenDate(), spaceRequest.getCloseDate());
+            scheduleBl.CreateSchedule(spaceRequest.getPeriodTimes(), space, spaceRequest.getOpenDate(), spaceRequest.getCloseDate());
         } catch (RuntimeException e) {
             LOGGER.error("Error: " + e);
             spaceRepository.delete(space);
