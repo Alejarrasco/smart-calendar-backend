@@ -15,11 +15,11 @@ import jakarta.persistence.Table;
 public class Faculty {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "faculty_id")
     private int facultyId;
 
-    @Column(name = "faculty_name", length = 100, nullable = false)
+    @Column(name = "faculty_name", length = 100, nullable = false, unique = true)
     private String facultyName;
 
     @OneToMany(mappedBy = "faculty")

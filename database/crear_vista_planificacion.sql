@@ -1,6 +1,8 @@
+DROP VIEW IF EXISTS planification;
 CREATE VIEW planification AS
 SELECT 
     a.assignation_id,
+    a.assignation_status,
     sp.space_id,
     sp.space_name,
     sb.subject_name,

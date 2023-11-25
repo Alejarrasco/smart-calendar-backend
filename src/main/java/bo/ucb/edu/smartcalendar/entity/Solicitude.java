@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class Solicitude {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "solicitude_id")
     private int solicitudeId;
 
@@ -37,7 +37,7 @@ public class Solicitude {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "solicitude_status", nullable = false)
-    private SolicitudeStatus solicitudeStatus;
+    private SolicitudeStatus solicitudeStatus = SolicitudeStatus.PENDING;
 
     @Column(name = "recurrent", nullable = false)
     private boolean recurrent;
@@ -50,7 +50,16 @@ public class Solicitude {
 
     @OneToMany(mappedBy = "solicitude")
     private Set<Assignation> assignations;
+    
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate = new Date(System.currentTimeMillis());
 
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost = "localhost";
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser = "springuser";
 
     // Constructor de la clase Solicitude.java
     public Solicitude() {

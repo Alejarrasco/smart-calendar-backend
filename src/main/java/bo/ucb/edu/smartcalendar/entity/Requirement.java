@@ -1,5 +1,7 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.sql.Date;
+
 import bo.ucb.edu.smartcalendar.entity.Space.SpaceType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +19,7 @@ import jakarta.persistence.Table;
 public class Requirement {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "requirement_id")
     private Integer requirementId;
 
@@ -40,6 +42,19 @@ public class Requirement {
 
     @Column(name = "semester", nullable = false)
     private String semester;
+
+    @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "requirement_status", nullable = false)
+    private boolean requirementStatus = true;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate = new Date(System.currentTimeMillis());
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost = "localhost";
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Requirement.java
@@ -116,4 +131,20 @@ public class Requirement {
         this.semester = semester;
     }
 
+    public boolean isRequirementStatus() {
+        return requirementStatus;
+    }
+
+    public void setRequirementStatus(boolean requirementStatus) {
+        this.requirementStatus = requirementStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "\nRequirementNo"+requirementId+" for "+subject.getSubjectName()+" on "+semester+"\n"+
+        "-> Periods per class: "+periodsPerClass+"\n"+
+        "-> Classes per week: "+classesPerWeek+"\n"+
+        "-> Space type: "+spaceType+"\n"+
+        "-> Max alumni: "+maxAlumni;
+    }
 }

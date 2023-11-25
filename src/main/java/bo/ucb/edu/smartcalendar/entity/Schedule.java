@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class Schedule {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "schedule_id")
     private int scheduleId;
 
@@ -38,8 +38,21 @@ public class Schedule {
     @Column(name = "close_date", nullable = false)
     private Date closeDate;
 
+    @Column(columnDefinition = "bit(1) DEFAULT 1",name = "schedule_status", nullable = false)
+    private boolean scheduleStatus = true;
+
     @OneToMany(mappedBy = "schedule")
     private Set<Assignation> assignations;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate = new Date(System.currentTimeMillis());
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost = "localhost";
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Schedule.java
@@ -94,5 +107,13 @@ public class Schedule {
 
     public void setCloseDate(Date closeDate) {
         this.closeDate = closeDate;
+    }
+
+    public boolean isScheduleStatus() {
+        return scheduleStatus;
+    }
+
+    public void setScheduleStatus(boolean scheduleStatus) {
+        this.scheduleStatus = scheduleStatus;
     }
 }

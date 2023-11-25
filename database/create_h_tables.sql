@@ -1,0 +1,26 @@
+
+-- Crear tablas historicas a partir de las tablas de la base de datos
+
+CREATE TABLE IF NOT EXISTS h_space AS SELECT * FROM space;
+ALTER TABLE h_space ADD COLUMN h_space_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+CREATE TABLE IF NOT EXISTS h_schedule AS SELECT * FROM schedule;
+ALTER TABLE h_schedule ADD COLUMN h_schedule_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+CREATE TABLE IF NOT EXISTS h_calendar_access AS SELECT * FROM calendar_access;
+ALTER TABLE h_calendar_access ADD COLUMN h_calendar_access_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+CREATE TABLE IF NOT EXISTS h_solicitude AS SELECT * FROM solicitude;
+ALTER TABLE h_solicitude ADD COLUMN h_solicitude_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+CREATE TABLE IF NOT EXISTS h_assignation AS SELECT * FROM assignation;
+ALTER TABLE h_assignation ADD COLUMN h_assignation_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+CREATE TABLE IF NOT EXISTS h_responsible AS SELECT * FROM responsible;
+ALTER TABLE h_responsible ADD COLUMN h_responsible_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+CREATE TABLE IF NOT EXISTS h_subject AS SELECT * FROM subject;
+ALTER TABLE h_subject ADD COLUMN h_subject_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;
+
+CREATE TABLE IF NOT EXISTS h_requirement AS SELECT * FROM requirement;
+ALTER TABLE h_requirement ADD COLUMN h_requirement_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY;

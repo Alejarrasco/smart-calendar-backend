@@ -1,5 +1,7 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ import jakarta.persistence.Table;
 public class CalendarAccess {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "calendar_access_id")
     private Integer calendarAccessId;
 
@@ -28,6 +30,19 @@ public class CalendarAccess {
 
     @Column(name = "registered_date", nullable = false)
     private String registeredDate;
+
+    @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "calendar_access_status", nullable = false)
+    private boolean calendarAccessStatus = true;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate = new Date(System.currentTimeMillis());
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost = "localhost";
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser = "springuser";
 
 
     // Constructor de la clase CalendarAccess.java
@@ -74,5 +89,11 @@ public class CalendarAccess {
         this.registeredDate = registeredDate;
     }
 
+    public boolean isCalendarAccessStatus() {
+        return calendarAccessStatus;
+    }
 
+    public void setCalendarAccessStatus(boolean calendarAccessStatus) {
+        this.calendarAccessStatus = calendarAccessStatus;
+    }
 }

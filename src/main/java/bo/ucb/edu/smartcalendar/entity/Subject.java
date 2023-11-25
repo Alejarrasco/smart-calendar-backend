@@ -1,5 +1,6 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.sql.Date;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import jakarta.persistence.Table;
 public class Subject {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "subject_id")
     private int subjectId;
 
@@ -34,11 +35,24 @@ public class Subject {
     @Column(name = "subject_code", length = 50, nullable = false, unique = true)
     private String subjectCode;
 
+    @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "subject_status", nullable = false)
+    private boolean subjectStatus = true;
+
     @OneToMany(mappedBy = "subject")
     private Set<Responsible> responsibles;
 
     @OneToMany(mappedBy = "subject")
     private Set<Solicitude> solicitudes;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date")
+    private Date audDate = new Date(System.currentTimeMillis());
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost = "localhost";
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false)
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Subject.java
@@ -85,22 +99,17 @@ public class Subject {
         this.subjectCode = subjectCode;
     }
 
-    public Set<Responsible> getResponsibles() {
-        return responsibles;
+    public boolean isSubjectStatus() {
+        return subjectStatus;
     }
 
-    public void setResponsibles(Set<Responsible> responsibles) {
-        this.responsibles = responsibles;
+    public void setSubjectStatus(boolean subjectStatus) {
+        this.subjectStatus = subjectStatus;
     }
 
-    public Set<Solicitude> getSolicitudes() {
-        return solicitudes;
+    @Override
+    public String toString() {
+        return "Subject No "+ subjectId +" "+ subjectName + " coded "+ subjectCode + " from faculty "+ faculty.getFacultyName();
     }
-
-    public void setSolicitudes(Set<Solicitude> solicitudes) {
-        this.solicitudes = solicitudes;
-    }
-
-    
 
 }

@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 public class Person {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int personId;
 
     @ManyToMany

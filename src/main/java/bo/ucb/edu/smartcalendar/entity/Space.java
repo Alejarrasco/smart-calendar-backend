@@ -1,5 +1,6 @@
 package bo.ucb.edu.smartcalendar.entity;
 
+import java.sql.Date;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import jakarta.persistence.Table;
 public class Space {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "space_id")
     private int spaceId;
 
@@ -29,7 +30,7 @@ public class Space {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "space_status", nullable = false)
-    private SpaceStatus spaceStatus;
+    private SpaceStatus spaceStatus = SpaceStatus.OPEN;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "space_type", nullable = false)
@@ -40,6 +41,16 @@ public class Space {
 
     @OneToMany(mappedBy = "space")
     private Set<Schedule> schedules;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate = new Date(System.currentTimeMillis());
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost = "localhost";
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Space.java
@@ -147,5 +158,23 @@ public class Space {
         public String getDisplayName() {
             return displayName;
         }
+
+        public static SpaceType fromDisplayName(String displayName) {
+            for (SpaceType b : SpaceType.values()) {
+                if (b.displayName.equals(displayName)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Space: "+ spaceName+ "\n"+
+        "Description: "+ spaceDescription+ "\n"+
+        "Status: "+ spaceStatus+ "\n"+
+        "Type: "+ spaceType+ "\n"+
+        "Capacity: "+ capacity+ "\n";
     }
 }

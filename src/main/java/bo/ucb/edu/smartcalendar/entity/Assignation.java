@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 public class Assignation {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "assignation_id")
     private int assignationId;
 
@@ -33,6 +33,19 @@ public class Assignation {
 
     @Column(name = "ai_generated", nullable = false)
     private boolean aiGenerated;
+
+    @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "assignation_status", nullable = false)
+    private boolean assignationStatus = true;
+
+    //Aud fields
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
+    private Date audDate = new Date(System.currentTimeMillis());
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'localhost'",name = "aud_host", nullable = false)
+    private String audHost = "localhost";
+
+    @Column(columnDefinition = "VARCHAR(100) DEFAULT 'springuser'",name = "aud_user", nullable = false, length = 100)
+    private String audUser = "springuser";
 
 
     // Constructor de la clase Assignation.java
@@ -87,6 +100,14 @@ public class Assignation {
 
     public void setAiGenerated(boolean aiGenerated) {
         this.aiGenerated = aiGenerated;
+    }
+
+    public boolean isAssignationStatus() {
+        return assignationStatus;
+    }
+
+    public void setAssignationStatus(boolean assignationStatus) {
+        this.assignationStatus = assignationStatus;
     }
 
     

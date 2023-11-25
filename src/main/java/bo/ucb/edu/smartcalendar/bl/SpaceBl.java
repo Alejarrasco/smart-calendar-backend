@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
+import bo.ucb.edu.smartcalendar.dto.SpaceRequest;
 import bo.ucb.edu.smartcalendar.entity.Space;
 import bo.ucb.edu.smartcalendar.entity.Space.SpaceType;
 import bo.ucb.edu.smartcalendar.repository.SpaceRepository;
@@ -22,8 +23,12 @@ public class SpaceBl {
     @Autowired
     private SpaceRepository spaceRepository;
 
-    public SpaceBl(SpaceRepository spaceRepository) {
+    @Autowired
+    private ScheduleBl scheduleBl;
+
+    public SpaceBl(SpaceRepository spaceRepository, ScheduleBl scheduleBl) {
         this.spaceRepository = spaceRepository;
+        this.scheduleBl = scheduleBl;
     }
 
     public SmartcalResponse ListSpacesGroupedByType(){
@@ -32,9 +37,23 @@ public class SpaceBl {
         LOGGER.info("Space types: " + spaceTypes);
 
         for(SpaceType spaceType : spaceTypes){
-            List<Space> spacesOfType = spaceRepository.findBySpaceType(spaceType);
-            LOGGER.info("Spaces of type " + spaceType + ": " + spacesOfType);
-            spacesGroupedByType.put(spaceType, spacesOfType);
+            LOGGER.info("Space type: " + spaceType);
+            try { 
+                LOGGER.info("Before findBySpaceType");
+                List<Space> spacesOfType = spaceRepository.findBySpaceType(spaceType);
+                for(Space space : spacesOfType){
+                    if (space.getSpaceStatus() == Space.SpaceStatus.DELETED) {
+                        spacesOfType.remove(space);
+                    }
+                }
+                LOGGER.info("After findBySpaceType");
+                LOGGER.info("Spaces of type " + spaceType + ": " + spacesOfType);
+                spacesGroupedByType.put(spaceType, spacesOfType);
+            } catch (Exception e) {
+                LOGGER.error("Error: " + e);
+                spacesGroupedByType.put(spaceType, null);
+                e.printStackTrace();
+            }
         }
         
         SmartcalResponse response = new SmartcalResponse();
@@ -48,6 +67,46 @@ public class SpaceBl {
             LOGGER.error("Space not found");
             throw new RuntimeException("Space not found");
         }
+        LOGGER.info("Space: " + space);
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(space);
+        return response;
+    }
+
+    public SmartcalResponse CreateSpace(SpaceRequest spaceRequest){
+        Space space = new Space();
+        space.setSpaceName(spaceRequest.getSpaceName());
+        space.setSpaceDescription(spaceRequest.getSpaceDescription());
+        space.setSpaceType(SpaceType.fromDisplayName(spaceRequest.getSpaceType())); 
+        space.setCapacity(spaceRequest.getCapacity());
+        space.setSpaceStatus(Space.SpaceStatus.OPEN);
+        spaceRepository.save(space);
+        LOGGER.info("Space: " + space);
+        try {
+            scheduleBl.CreateSchedule(spaceRequest.getPeriodTimes(), space, spaceRequest.getOpenDate(), spaceRequest.getCloseDate());
+        } catch (RuntimeException e) {
+            LOGGER.error("Error: " + e);
+            spaceRepository.delete(space);
+            throw new RuntimeException("Error creating schedule for space "+ spaceRequest.getSpaceName());
+        }
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(space);
+        return response;
+    }
+
+    public SmartcalResponse CloseSpace(Integer space_id) throws RuntimeException{
+        Space space = spaceRepository.findById(space_id).orElse(null);
+        if (space == null) {
+            LOGGER.error("Space not found");
+            throw new RuntimeException("Space not found");
+        }
+        try {
+            scheduleBl.CloseScheduleBySpaceId(space_id);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        space.setSpaceStatus(Space.SpaceStatus.CLOSED);
+        spaceRepository.save(space);
         LOGGER.info("Space: " + space);
         SmartcalResponse response = new SmartcalResponse();
         response.setData(space);
