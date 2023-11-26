@@ -75,6 +75,7 @@ public class SpaceBl {
 
     public SmartcalResponse CreateSpace(SpaceRequest spaceRequest){
         Space space = new Space();
+        LOGGER.info("Space request: " + spaceRequest);
         space.setSpaceName(spaceRequest.getSpaceName());
         space.setSpaceDescription(spaceRequest.getSpaceDescription());
         space.setSpaceType(SpaceType.fromDisplayName(spaceRequest.getSpaceType())); 
