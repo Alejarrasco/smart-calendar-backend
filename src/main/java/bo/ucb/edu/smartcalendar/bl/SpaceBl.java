@@ -113,4 +113,14 @@ public class SpaceBl {
         response.setData(space);
         return response;
     }
+
+    public List<Space> getSpacesByRequirements(SpaceType spaceType, Integer maxAlumni){
+        LOGGER.info("Called getSpacesByRequirements");
+        List<Space> spaces = spaceRepository.findBySpaceTypeAndCapacityGreaterThanEqual(spaceType.name(), maxAlumni);
+        if (spaces == null) {
+            LOGGER.error("No space found that meets the requirements");
+            throw new RuntimeException("No space found that meets the requirements");
+        }
+        return spaces;
+    }
 }

@@ -12,4 +12,7 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
 
     @Query(value = "SELECT * FROM space WHERE space_id = ?1 AND space_status != 'DELETED'", nativeQuery = true)
     public Space findBySpaceId(Integer spaceId); //FIXME: this method is not used
+
+    @Query(value = "SELECT * FROM space WHERE space_type = ?1 AND capacity >= ?2 AND space_status != 'DELETED'", nativeQuery = true)
+    public List<Space> findBySpaceTypeAndCapacityGreaterThanEqual(String spaceType, Integer capacity);
 }

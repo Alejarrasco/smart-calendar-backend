@@ -31,11 +31,11 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "subjectCode": "CHEM",
-    "periodsPerClass": 2,
+    "subjectCode": "CS202",
+    "periodsPerClass": 3,
     "classesPerWeek": 2,
-    "spaceType": "Laboratorio",
-    "maxAlumni": 20,
+    "spaceType": "Aula",
+    "maxAlumni": 25,
     "semester": "FIRST"
 }
 

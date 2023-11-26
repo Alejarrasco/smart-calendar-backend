@@ -1,5 +1,7 @@
 package bo.ucb.edu.smartcalendar.bl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,4 +67,35 @@ public class RequirementBl {
         return response;
     }
 
+    public Integer getMaximumCapacity(SpaceType spaceType){
+        LOGGER.info("Called getMaximumCapacity");
+        Integer maximumCapacity = 0;
+        try {
+            maximumCapacity = requirementRepository.findMaximumCapacityBySpaceType(spaceType.name());
+        } catch (Exception e) {
+            LOGGER.error("Error: " + e);
+        }
+        return maximumCapacity;
+    }
+    
+    public List<Requirement> getRequirementsBySpaceType(SpaceType spaceType){
+        LOGGER.info("Called getRequirements");
+        List<Requirement> requirements = requirementRepository.findBySpaceType(spaceType.name());
+        return requirements;
+    }
+
+    public String totalTimeRequired(Requirement requirement) {
+        LOGGER.info("Called totalTimeRequired");
+        Integer totalTimeRequired = requirement.getPeriodsPerClass();
+        if (totalTimeRequired == 2){
+            return totalTimeRequired + " hour";
+        } else if (totalTimeRequired == 3){
+            return totalTimeRequired + " hour and 30 minutes";
+        } else if (totalTimeRequired % 2 == 0) {
+            return totalTimeRequired / 2 + " hours";
+        } else {
+            return totalTimeRequired / 2 + " hours and 30 minutes";
+        }
+    }
+    
 }
