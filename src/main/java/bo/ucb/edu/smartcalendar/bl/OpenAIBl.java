@@ -1,5 +1,9 @@
 package bo.ucb.edu.smartcalendar.bl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,10 +14,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import bo.ucb.edu.smartcalendar.dto.Message;
 import bo.ucb.edu.smartcalendar.dto.OpenAIRequest;
 import bo.ucb.edu.smartcalendar.dto.OpenAIResponse;
+import bo.ucb.edu.smartcalendar.dto.ParseAIResponse;
 import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
+import bo.ucb.edu.smartcalendar.dto.OpenAIResponse.Choice;
 import bo.ucb.edu.smartcalendar.entity.Space.SpaceType;
+import bo.ucb.edu.smartcalendar.entity.Assignation;
 import bo.ucb.edu.smartcalendar.entity.Requirement;
 import bo.ucb.edu.smartcalendar.entity.Space;
 
@@ -80,6 +90,66 @@ public class OpenAIBl {
         return subjectsString;
     }
 
+    private boolean validateResponse(OpenAIResponse response) {
+        LOGGER.info("Called Generate Prompt - validateResponse");
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            ParseAIResponse[] parseAIResponses = mapper.readValue(response.getChoices().get(0).getMessage().getContent(), ParseAIResponse[].class);
+            for (ParseAIResponse parseAIResponse : parseAIResponses) {
+                if (parseAIResponse.getSpace() == null || parseAIResponse.getSchedules() == null || parseAIResponse.getSchedules().isEmpty()) {
+                    LOGGER.error("Error: Invalid response at space or schedules ");
+                    return false;
+                }
+                for (ParseAIResponse.Schedule schedule : parseAIResponse.getSchedules()) {
+                    if (schedule.getSubject_code() == null || schedule.getAssigned_hours() == null || schedule.getAssigned_hours().isEmpty()) {
+                        LOGGER.error("Error: Invalid response at subject_code or assigned_hours ");
+                        return false;
+                    }
+                    for (ParseAIResponse.Schedule.AssignedHour assignedHour : schedule.getAssigned_hours()) {
+                        if (assignedHour.getDay() == null || assignedHour.getStart_time() == null || assignedHour.getEnd_time() == null) {
+                            LOGGER.error("Error: Invalid response at day, start_time or end_time ");
+                            return false;
+                    }
+                }
+            }
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error: " + e);
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private List<Assignation> processResponseAssignations(OpenAIResponse response) {
+        LOGGER.info("Called Generate Prompt - processResponseAssignations");
+        ObjectMapper mapper = new ObjectMapper();
+        List<Assignation> assignations = new ArrayList<>();
+        try {
+            ParseAIResponse[] parseAIResponses = mapper.readValue(response.getChoices().get(0).getMessage().getContent(), ParseAIResponse[].class);
+            for (ParseAIResponse parseAIResponse : parseAIResponses) {
+                Space space = spaceBl.getSpaceByName(parseAIResponse.getSpace());
+                for (ParseAIResponse.Schedule schedule : parseAIResponse.getSchedules()) {
+                    Requirement requirement = requirementBl.getRequirementBySubjectCode(schedule.getSubject_code());
+                    for (ParseAIResponse.Schedule.AssignedHour assignedHour : schedule.getAssigned_hours()) {
+                        Assignation assignation = new Assignation();
+                        assignation.setSpace(space);
+                        assignation.setRequirement(requirement);
+                        assignation.setDay(assignedHour.getDay());
+                        assignation.setStartTime(assignedHour.getStart_time());
+                        assignation.setEndTime(assignedHour.getEnd_time());
+                        assignations.add(assignation);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error: " + e);
+            e.printStackTrace();
+            return null;
+        }
+        return assignations;
+    }
+
     public SmartcalResponse generatePlanificationsAutomatically(String spaceTypeString){
 
         LOGGER.info("Called Generate Prompt");
@@ -127,6 +197,15 @@ public class OpenAIBl {
 
         //Call the API
         OpenAIResponse response = restTemplate.postForObject(apiUrl, request, OpenAIResponse.class);
+        */
+
+        //Just for testing read the file at \http\test.json and try to parse it
+
+        Path filepath = Paths.get("src/main/java/bo/ucb/edu/smartcalendar/http/test.json");
+        String fileContent = Files.readString(filepath);
+
+        OpenAIResponse response = new OpenAIResponse(new ArrayList<>());
+        response.getChoices().add(new Choice(0, new Message("response", fileContent)));
 
         if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
             throw new RuntimeException("OpenAI API response is empty");
@@ -138,7 +217,7 @@ public class OpenAIBl {
             processResponseAssignations(response);
         } catch (Exception e) {
             throw new RuntimeException("Error processing OpenAI API response");
-        } */
+        } 
 
         SmartcalResponse smartcalResponse = new SmartcalResponse();
         smartcalResponse.setData("OK");
