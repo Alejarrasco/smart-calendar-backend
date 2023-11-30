@@ -121,6 +121,7 @@ public class SolicitudeBl {
     }
 
     public SmartcalResponse RejectSolicitude(Integer token, Integer solicitudeId){
+        //TODO: Validate if token belongs to an administrator
         LOGGER.info("Rejecting solicitude id: " + solicitudeId);
 
         Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
@@ -132,7 +133,8 @@ public class SolicitudeBl {
 
         List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitudeId);
         for (Assignation assignation : assignations){
-            assignationRepository.delete(assignation);
+            assignation.setAssignationStatus(false);
+            assignationRepository.save(assignation);
         }
 
         SmartcalResponse response = new SmartcalResponse();
@@ -141,6 +143,7 @@ public class SolicitudeBl {
     }
 
     public SmartcalResponse CancelSolicitude(Integer token, Integer solicitudeId){
+        //TODO: Validate if token belongs to the solicitude responsible
         LOGGER.info("Cancelling solicitude id: " + solicitudeId);
 
         Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
@@ -152,7 +155,8 @@ public class SolicitudeBl {
 
         List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitudeId);
         for (Assignation assignation : assignations){
-            assignationRepository.delete(assignation);
+            assignation.setAssignationStatus(false);
+            assignationRepository.save(assignation);
         }
 
         SmartcalResponse response = new SmartcalResponse();
