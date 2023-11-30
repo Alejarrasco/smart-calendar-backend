@@ -8,6 +8,17 @@ public class RequirementRequest {
     private String spaceType;
     private Integer maxAlumni;
     private String semester;
+    private String preferences;
+
+
+    public String getPreferences() {
+        return preferences;
+    }
+
+
+    public void setPreferences(String preferences) {
+        this.preferences = preferences;
+    }
 
 
     public RequirementRequest() {

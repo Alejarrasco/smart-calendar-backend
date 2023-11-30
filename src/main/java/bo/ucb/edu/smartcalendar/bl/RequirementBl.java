@@ -46,6 +46,7 @@ public class RequirementBl {
             requirement.setSpaceType(SpaceType.fromDisplayName(requirementRequest.getSpaceType()));
             requirement.setMaxAlumni(requirementRequest.getMaxAlumni());
             requirement.setSemester(requirementRequest.getSemester());
+            requirement.setPreferences(requirementRequest.getPreferences());
             requirementRepository.save(requirement);
             LOGGER.info("Created requirement: " + requirement);
         }
@@ -60,6 +61,7 @@ public class RequirementBl {
         requirement.setSpaceType(SpaceType.fromDisplayName(requirementRequest.getSpaceType()));
         requirement.setMaxAlumni(requirementRequest.getMaxAlumni());
         requirement.setSemester(requirementRequest.getSemester());
+        requirement.setPreferences(requirementRequest.getPreferences());
         requirementRepository.save(requirement);
         LOGGER.info("Created requirement: " + requirement);
         SmartcalResponse response = new SmartcalResponse();
