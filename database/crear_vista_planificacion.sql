@@ -8,6 +8,7 @@ SELECT
     sb.subject_name,
     pe.first_name,
     pe.last_name,
+    sl.solicitude_status,
     sl.recurrent,
     sl.start_date,
     sl.end_date,
@@ -28,7 +29,7 @@ FROM
         INNER JOIN
     person pe ON sl.person_id = pe.person_id
         INNER JOIN
-    subject sb ON sl.subject_id = sb.subject_id
+    subject sb ON sl.subject_id = sb.subject_id;
 
 
 --SELECT assignation_id, space_id, space_name, subject_name, first_name, last_name, recurrent, start_date, end_date, period_id, weekday, start_time, end_time FROM planification WHERE recurrent = 0 AND start_date <= '2023-11-13' AND end_date >= DATE_ADD('2023-11-13', INTERVAL 7 DAY) AND space_id = 1
