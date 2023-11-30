@@ -121,7 +121,7 @@ public class OpenAIBl {
         return true;
     }
 
-    private List<Assignation> processResponseAssignations(OpenAIResponse response) {
+   /*  private List<Assignation> processResponseAssignations(OpenAIResponse response) {
         LOGGER.info("Called Generate Prompt - processResponseAssignations");
         ObjectMapper mapper = new ObjectMapper();
         List<Assignation> assignations = new ArrayList<>();
@@ -149,7 +149,7 @@ public class OpenAIBl {
         }
         return assignations;
     }
-
+ */
     public SmartcalResponse generatePlanificationsAutomatically(String spaceTypeString){
 
         LOGGER.info("Called Generate Prompt");
@@ -202,10 +202,10 @@ public class OpenAIBl {
         //Just for testing read the file at \http\test.json and try to parse it
 
         Path filepath = Paths.get("src/main/java/bo/ucb/edu/smartcalendar/http/test.json");
-        String fileContent = Files.readString(filepath);
+        //String fileContent = Files.readString(filepath);
 
         OpenAIResponse response = new OpenAIResponse(new ArrayList<>());
-        response.getChoices().add(new Choice(0, new Message("response", fileContent)));
+        //response.getChoices().add(new Choice(0, new Message("response", fileContent)));
 
         if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
             throw new RuntimeException("OpenAI API response is empty");
@@ -214,7 +214,7 @@ public class OpenAIBl {
         }
 
         try {
-            processResponseAssignations(response);
+            //processResponseAssignations(response);
         } catch (Exception e) {
             throw new RuntimeException("Error processing OpenAI API response");
         } 

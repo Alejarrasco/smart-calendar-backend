@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import bo.ucb.edu.smartcalendar.bl.SubjectBl;
@@ -29,10 +30,18 @@ public class SubjectAPI {
     }
 
     @GetMapping
-    public SmartcalResponse ListSubjects(){
+    public SmartcalResponse ListSubjects(@RequestParam(value = "responsible", required = false) Integer responsibleId){
         LOGGER.info("Called ListSubjects");
-        SmartcalResponse response = subjectBl.ListSubjects();
-        response.setCode("SUBJ-0000");
+        SmartcalResponse response = new SmartcalResponse();
+        if (responsibleId != null) {
+            LOGGER.info("Called ListSubjects by responsible");
+            response.setData(subjectBl.ListSubjectsByResponsible(responsibleId));
+            response.setCode("SUBJ-0002");
+            
+        } else {
+            response = subjectBl.ListSubjects();
+            response.setCode("SUBJ-0000");
+        }
         return response;
     }
 
@@ -80,5 +89,6 @@ public class SubjectAPI {
         }
         return response;
     }
+    
 
 }

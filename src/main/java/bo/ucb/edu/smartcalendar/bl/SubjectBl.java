@@ -68,6 +68,18 @@ public class SubjectBl {
         return response;
     }
 
+    public List<Subject> ListSubjectsByResponsible(Integer responsibleId){
+        LOGGER.info("Called ListSubjectsByResponsible");
+        List<Subject> subjects;
+        try {
+            subjects = subjectRepository.findByResponsibles(responsibleId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error listing subjects by responsible: " + e.getMessage());
+        }
+        return subjects;
+    }
+
     public SmartcalResponse CreateSubject(SubjectRequest subjectRequest){
         LOGGER.info("Called CreateSubject");
         Subject subject = new Subject();

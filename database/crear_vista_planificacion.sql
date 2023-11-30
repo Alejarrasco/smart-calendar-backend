@@ -8,6 +8,7 @@ SELECT
     sb.subject_name,
     pe.first_name,
     pe.last_name,
+    sl.solicitude_id,
     sl.solicitude_status,
     sl.recurrent,
     sl.start_date,
