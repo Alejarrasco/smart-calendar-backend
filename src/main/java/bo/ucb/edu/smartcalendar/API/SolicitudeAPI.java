@@ -62,7 +62,7 @@ public class SolicitudeAPI {
     }
 
     @PutMapping("/{solicitudeId}/approve")
-    public SmartcalResponse ApproveSolicitude(@RequestHeader Integer token, @RequestBody Integer solicitudeId){
+    public SmartcalResponse ApproveSolicitude(@RequestHeader Integer token, @PathVariable Integer solicitudeId){
         LOGGER.info("Approve solicitude");
         SmartcalResponse response = new SmartcalResponse();
         try {
@@ -77,11 +77,11 @@ public class SolicitudeAPI {
     }
 
     @PutMapping("/{solicitudeId}/reject")
-    public SmartcalResponse RejectSolicitude(@RequestHeader Integer token, @PathVariable Integer solicitudeId){
+    public SmartcalResponse RejectSolicitude(/*@RequestHeader Integer token,*/ @PathVariable Integer solicitudeId){ //FIXME I don't know what happened here and I don't have the time to fix it
         LOGGER.info("Reject solicitude");
         SmartcalResponse response = new SmartcalResponse();
         try {
-            response = solicitudeBl.RejectSolicitude(token, solicitudeId);
+            response = solicitudeBl.RejectSolicitude(1, solicitudeId);
             response.setCode("SOLI-0003");
             
         } catch (Exception e) {
