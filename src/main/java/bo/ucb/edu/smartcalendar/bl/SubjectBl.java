@@ -55,6 +55,7 @@ public class SubjectBl {
             subjectResponse.setFacultyName(subject.getFaculty().getFacultyName());
             subjectResponse.setSubjectName(subject.getSubjectName());
             subjectResponse.setSubjectCode(subject.getSubjectCode());
+            subjectResponse.setSubjectDescription(subject.getSubjectDescription());
             List<Responsible> responsibles = personBl.ListResponsibles(subject.getSubjectId());
             Set<Integer> responsiblesIds = new HashSet<Integer>();
             for (Responsible responsible : responsibles) {
@@ -125,6 +126,18 @@ public class SubjectBl {
         return response;
     }
 
+    public SmartcalResponse ListFaculties(){
+        LOGGER.info("Called ListFaculties");
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(facultyRepository.findAll());
+        return response;
+    }
 
+    public SmartcalResponse ListResponsibles(Integer subjectId){
+        LOGGER.info("Called ListResponsibles");
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(personBl.ListResponsibles(subjectId));
+        return response;
+    }
         
 }

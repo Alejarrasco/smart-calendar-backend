@@ -40,4 +40,18 @@ public class PersonAPI {
         return response;
     }
 
+    @GetMapping(path = "/{id}")
+    public SmartcalResponse FindPersonById(@PathVariable Integer id){
+        LOGGER.info("Called FindPersonById");
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            response = personBl.FindPersonById(id);
+            response.setCode("PERS-0001");
+        } catch (RuntimeException e) {
+            response.setCode("PERS-6001");
+            response.setErrormessage(e.getMessage());
+        }
+        return response;
+    }
+
 }

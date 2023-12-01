@@ -12,19 +12,20 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "subjectName": "Chemistry",
-    "subjectCode": "CHEM",
-    "facultyName": "Faculty of Science",
-    "subjectDescription": "Inorganic Chemistry",
+    "subjectName": "Project Development",
+    "subjectCode": "PROY-101",
+    "facultyName": "Faculty of Engineering",
+    "subjectDescription": "Project development with Agile and PMBoK",
     "responsiblesIds": [3],
     "requirements": [
         {
-            "subjectCode": "CHEM",
-            "periodsPerClass": 2,
+            "subjectCode": "PROY-101",
+            "periodsPerClass": 6,
             "classesPerWeek": 2,
-            "spaceType": "Laboratorio",
-            "maxAlumni": 20,
-            "semester": "FIRST"
+            "spaceType": "Auditorio",
+            "maxAlumni": 30,
+            "semester": "THIRD",
+            "preferences": "Should be before midday and never on fridays"
         }
     ]
 }
@@ -52,3 +53,11 @@ Content-Type: application/json
     "personsIds": [1],
     "subjectCode": "HIST101"
 }
+
+###
+GET http://localhost:8080/api/v1/subject/faculty
+Accept: application/json
+
+###
+GET http://localhost:8080/api/v1/subject/3/responsible
+Accept: application/json

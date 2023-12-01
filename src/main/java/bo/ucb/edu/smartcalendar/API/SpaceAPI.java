@@ -78,4 +78,18 @@ public class SpaceAPI {
         }
         return response;
     }
+
+    @GetMapping(path = "/type/list")
+    public SmartcalResponse ListSpaceTypes(){
+        LOGGER.info("Called ListSpaceTypes");
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            response = spaceBl.ListSpaceTypes();
+            response.setCode("SPAC-0003");
+        } catch (RuntimeException e) {
+            response.setCode("SPAC-6003");
+            response.setErrormessage("No se pudo listar los tipos de espacio");
+        }
+        return response;
+    }
 }

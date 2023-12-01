@@ -123,4 +123,15 @@ public class SpaceBl {
         }
         return spaces;
     }
+
+    public SmartcalResponse ListSpaceTypes(){
+        LOGGER.info("Called ListSpaceTypes");
+        SmartcalResponse response = new SmartcalResponse();
+        String[] spaceTypes = new String[SpaceType.values().length];
+        for(SpaceType spaceType : SpaceType.values()){
+            spaceTypes[spaceType.ordinal()] = spaceType.getDisplayName();
+        }
+        response.setData(spaceTypes);
+        return response;
+    }
 }
