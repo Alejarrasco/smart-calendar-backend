@@ -9,12 +9,12 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "subjectCode": "CHEM",
+  "subjectCode": "PROY-101",
    "personId": 3,
   "recurrent": true,
   "startDate": "2023-11-01",
     "endDate": "2023-12-31",
-    "periods": [31],
+    "periods": [2, 3],
     "spaceId": 53
 }
 ###

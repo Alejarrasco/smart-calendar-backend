@@ -156,6 +156,8 @@ public class Requirement {
         "-> Periods per class: "+periodsPerClass+"\n"+
         "-> Classes per week: "+classesPerWeek+"\n"+
         "-> Space type: "+spaceType+"\n"+
-        "-> Max alumni: "+maxAlumni;
+        "-> Max alumni: "+maxAlumni+"\n"+
+        "-> Preferences: "+preferences+"\n";
+
     }
 }

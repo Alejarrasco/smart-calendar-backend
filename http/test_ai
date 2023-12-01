@@ -1,0 +1,24 @@
+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
+
+
+curl https://api.openai.com/v1/chat/completions ^
+  -H "Content-Type: application/json" ^
+  -H "Authorization: Bearer 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" ^
+  -d "{
+    "model": "gpt-3.5-turbo",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Eres el asistente del director academico de una universidad y tienes que moderar entre las preferencias de los profesores y la disponibilidad de los distintos espacios en la universidad, para ello dispones de la planificacion actual de las asignaciones y los comentarios de los profesores sobre sus preferencias de asignacion."
+      },
+      {
+        "role": "user",
+        "content": "A continuacion se encuentra una lista de las asignaciones actuales del Laboratorio Labo 8, con alguna informacion adicional sobre el mismo:\nAsignacion: 102\nDia: Jueves\nHorario: 11:00:00 - 11:30:00\nMateria: Chemistry\nProfesor: Bob Johnson\n\nAsignacion: 103\nDia: Viernes\nHorario: 08:00:00 - 08:30:00\nMateria: Chemistry\nProfesor: Bob Johnson\n\nAsignacion: 152\nDia: Jueves\nHorario: 11:00:00 - 11:30:00\nMateria: Chemistry\nProfesor: Bob Johnson\n\nAsignacion: 202\nDia: Lunes\nHorario: 08:30:00 - 09:00:00\nMateria: Project Development\nProfesor: Bob Johnson\n\nAsignacion: 203\nDia: Lunes\nHorario: 09:00:00 - 09:30:00\nMateria: Project Development\nProfesor: Bob Johnson\n\nA partir de los siguientes comentarios de docentes que han solicitado espacios para sus clases en el Laboratorio Labo 8, indica que personas estarian descontentas con su asignacion actual y por que:\nMateria: Chemistry\nPreferencias: Sin preferencias\n\nMateria: Mathematics\nPreferencias: Sin preferencias\n\nMateria: History\nPreferencias: Sin preferencias\n\nMateria: Project Development\nPreferencias: Should be before midday and never on fridays"
+      }
+    ],
+    "temperature": 1,
+    "max_tokens": 512,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0
+  }"

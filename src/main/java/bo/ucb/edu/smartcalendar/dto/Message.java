@@ -10,6 +10,9 @@ public class Message {
         this.content = content;
     }
 
+    public Message() {
+    }
+
     public String getRole() {
         return role;
     }
@@ -24,5 +27,13 @@ public class Message {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString(){
+        return "Message{" +
+            "role='" + role + '\'' +
+            ", content='" + content + '\'' +
+            '}';
     }
 }

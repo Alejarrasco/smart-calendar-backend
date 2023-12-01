@@ -1,5 +1,8 @@
 package bo.ucb.edu.smartcalendar.bl;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -98,6 +101,28 @@ public class RequirementBl {
         } else {
             return totalTimeRequired / 2 + " hours and 30 minutes";
         }
+    }
+
+    public List<Requirement> getRequirementsBySpaceSinceLastMonday(Integer spaceId){
+        LOGGER.info("Called getRequirementsBySpaceAndDate");
+        LOGGER.info(spaceId + " - " + getLastMonday());
+        List<Requirement> requirements = requirementRepository.findBySpaceAndDate(spaceId, getLastMonday());
+        LOGGER.info("Requirements: " + requirements);
+        return requirements;
+    }
+
+    public static String getLastMonday(){
+        LocalDate currentDate = LocalDate.now();
+
+        LocalDate lastMonday = currentDate;
+        while(lastMonday.getDayOfWeek() != DayOfWeek.MONDAY){
+            lastMonday = lastMonday.minusDays(1);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = lastMonday.format(formatter);
+
+        return formattedDate;
     }
     
 }

@@ -37,6 +37,7 @@ public class PlanificationViewBl {
 
     public SmartcalResponse ListAssignationsInCurrentWeekBySpace(Integer spaceId){
         String lastMonday = getLastMonday();
+        LOGGER.info("Last monday: " + lastMonday);
 
         Weekday[] weekdays = Weekday.values();
         HashMap<Weekday, HashMap<String, Planification>> assignationsGroupedByDayAndPeriod = new HashMap<Weekday, HashMap<String, Planification>>();
@@ -48,14 +49,40 @@ public class PlanificationViewBl {
                 try {
                     List<Planification> assignations = planificationViewRepository.ListAssignationsSinceLastMondayBySpaceAndWeekdayAndPeriod(lastMonday, spaceId, weekday.name(), period.getPeriodId());
                     if (assignations.size() > 1) {
-                        LOGGER.error("Choque de horarios en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime());
-                        conflicts += "Choque de horarios en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime()+ "\n";
+                        // Caso en el que hay más de una asignación en el mismo periodo
+                        try {
+                            List<Planification> approvedAssignations = planificationViewRepository.ListApprovedAssignationsSinceLastMondayBySpaceAndWeekdayAndPeriod(lastMonday, spaceId, weekday.name(), period.getPeriodId());
+                            if (approvedAssignations.size() == 1) {
+                                // Caso en el que hay más de una asignación en el mismo periodo pero solo una aprobada
+                                thisDayAssignations.put(period.getStartTime().toString(), approvedAssignations.get(0));
+                            } else if (approvedAssignations.size() > 1) {
+                                // Caso en el que hay más de una asignación en el mismo periodo y más de una aprobada
+                                LOGGER.error("Choque de horarios aprobados en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime());
+                                conflicts += "Choque de horarios aprobados en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime()+ "\n";
+                                thisDayAssignations.put(period.getStartTime().toString(), null);
+                            } else {
+                                // Caso en el que hay más de una asignación en el mismo periodo pero ninguna aprobada
+                                LOGGER.warn("Choque de horarios no aprobados en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime());
+                                conflicts += "Choque de horarios no aprobados en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime()+ "\n";
+                                thisDayAssignations.put(period.getStartTime().toString(), null);
+                            }
+
+                        } catch (Exception e) {
+                            // Caso en el que hay más de una asignación en el mismo periodo pero ninguna aprobada
+                            LOGGER.warn("Choque de horarios no aprobados en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime());
+                            conflicts += "Choque de horarios no aprobados en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime()+ "\n";
+                            thisDayAssignations.put(period.getStartTime().toString(), null);
+                        }
+                        
                     } else if (assignations.size() == 1) {
+                        // Caso en el que hay una sola asignación en el mismo periodo
                         thisDayAssignations.put(period.getStartTime().toString(), assignations.get(0));
                     } else {
+                        // Caso en el que no hay asignaciones en el mismo periodo
                         thisDayAssignations.put(period.getStartTime().toString(), null);
                     }
                 } catch (Exception e) {
+                    // Caso en el que no hay ninguna asignación
                     LOGGER.info("No existen asignaciones para el espacio "+spaceId+" en "+weekday+" de "+period.getStartTime()+" a "+period.getEndTime());
                     thisDayAssignations.put(period.getStartTime().toString(), null);
                 }
@@ -129,7 +156,14 @@ public class PlanificationViewBl {
         return response;
     }
 
- */    private String getLastMonday(){
+ */    
+
+    public List<Planification> getPlanificationView(Integer spaceId){
+        List<Planification> planificationView = planificationViewRepository.getPlanificationView(getLastMonday(),spaceId);
+        return planificationView;
+    }
+
+    public String getLastMonday(){
         LocalDate currentDate = LocalDate.now();
 
         LocalDate lastMonday = currentDate;
@@ -139,7 +173,7 @@ public class PlanificationViewBl {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = lastMonday.format(formatter);
-        LOGGER.info("Last monday: " + formattedDate);
+
         return formattedDate;
     }
 }
