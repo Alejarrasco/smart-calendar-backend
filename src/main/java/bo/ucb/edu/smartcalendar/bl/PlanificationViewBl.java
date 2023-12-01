@@ -37,6 +37,7 @@ public class PlanificationViewBl {
 
     public SmartcalResponse ListAssignationsInCurrentWeekBySpace(Integer spaceId){
         String lastMonday = getLastMonday();
+        LOGGER.info("Last monday: " + lastMonday);
 
         Weekday[] weekdays = Weekday.values();
         HashMap<Weekday, HashMap<String, Planification>> assignationsGroupedByDayAndPeriod = new HashMap<Weekday, HashMap<String, Planification>>();
@@ -129,7 +130,14 @@ public class PlanificationViewBl {
         return response;
     }
 
- */    private String getLastMonday(){
+ */    
+
+    public List<Planification> getPlanificationView(Integer spaceId){
+        List<Planification> planificationView = planificationViewRepository.getPlanificationView(getLastMonday(),spaceId);
+        return planificationView;
+    }
+
+    public String getLastMonday(){
         LocalDate currentDate = LocalDate.now();
 
         LocalDate lastMonday = currentDate;
@@ -139,7 +147,7 @@ public class PlanificationViewBl {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDate = lastMonday.format(formatter);
-        LOGGER.info("Last monday: " + formattedDate);
+
         return formattedDate;
     }
 }

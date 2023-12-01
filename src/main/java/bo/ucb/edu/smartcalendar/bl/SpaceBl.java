@@ -73,6 +73,16 @@ public class SpaceBl {
         return response;
     }
 
+    public Space getSpaceById(Integer id) throws RuntimeException{
+        Space space = spaceRepository.findById(id).orElse(null);
+        if (space == null) {
+            LOGGER.error("Space not found");
+            throw new RuntimeException("Space not found");
+        }
+        LOGGER.info("Space: " + space);
+        return space;
+    }
+
     public SmartcalResponse CreateSpace(SpaceRequest spaceRequest){
         Space space = new Space();
         LOGGER.info("Space request: " + spaceRequest);

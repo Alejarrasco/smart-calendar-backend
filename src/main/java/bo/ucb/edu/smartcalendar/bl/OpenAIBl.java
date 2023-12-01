@@ -24,6 +24,7 @@ import bo.ucb.edu.smartcalendar.dto.SmartcalResponse;
 import bo.ucb.edu.smartcalendar.dto.OpenAIResponse.Choice;
 import bo.ucb.edu.smartcalendar.entity.Space.SpaceType;
 import bo.ucb.edu.smartcalendar.entity.Assignation;
+import bo.ucb.edu.smartcalendar.entity.Planification;
 import bo.ucb.edu.smartcalendar.entity.Requirement;
 import bo.ucb.edu.smartcalendar.entity.Space;
 
@@ -45,17 +46,21 @@ public class OpenAIBl {
     @Autowired
     private RequirementBl requirementBl;
 
+    @Autowired
+    private PlanificationViewBl planificationViewBl;
+
     @Value("${openai.model}")
     private String model;
 
     @Value("${openai.api.url}")
     private String apiUrl;
 
-    public OpenAIBl(RestTemplate restTemplate, SpaceBl spaceBl, ScheduleBl scheduleBl, RequirementBl requirementBl) {
+    public OpenAIBl(RestTemplate restTemplate, SpaceBl spaceBl, ScheduleBl scheduleBl, RequirementBl requirementBl, PlanificationViewBl planificationViewBl) {
         this.restTemplate = restTemplate;
         this.spaceBl = spaceBl;
         this.scheduleBl = scheduleBl;
         this.requirementBl = requirementBl;
+        this.planificationViewBl = planificationViewBl;
     }
 
     private String selectSpaces(SpaceType spaceType){
@@ -150,6 +155,77 @@ public class OpenAIBl {
         return assignations;
     }
  */
+    private String writePlanifications(int spaceId){
+        LOGGER.info("Called Generate Prompt - writePlanifications");
+        List<Planification> plans = planificationViewBl.getPlanificationView(spaceId);
+        String planif = "";
+        for (Planification plan : plans) {
+            planif += "Asignacion: " + plan.getAssignationId() + "\n" +
+            "Dia: " + plan.getWeekDay() + "\n" +
+            "Horario: " + plan.getStartTime() + " - " + plan.getEndTime() + "\n" +
+            "Materia: " + plan.getSubjectName() + "\n" +
+            "Profesor: " + plan.getFirstName() + " " + plan.getLastName() + "\n" +
+            "\n";
+        }
+
+        return planif;
+    }
+
+    private String writePreferences(int spaceId) {
+        LOGGER.info("Called Generate Prompt - writePreferences");
+        List<Requirement> plans = requirementBl.getRequirementsBySpaceSinceLastMonday(spaceId);
+        String prefs = "";
+        LOGGER.info("Requirements found: " + plans.size());
+        for (Requirement plan : plans) {
+            LOGGER.info(plan.toString());
+            prefs += "Materia: " + plan.getSubject().getSubjectName() + "\n";
+            //"Profesor: " + plan.getSubject().getFirstName() + " " + plan.getSubject().getLastName() + "\n" +
+            if (plan.getPreferences() == null) {
+                prefs += "Preferencias: Sin preferencias\n";
+            } else {
+                prefs += "Preferencias: " + plan.getPreferences() + "\n";
+            }
+            prefs += "\n";
+        }
+
+        return prefs;
+
+    }
+
+    public SmartcalResponse AskAiReview(Integer spaceId) {
+        LOGGER.info("Called AskAiReview");
+        String context = "Eres el asistente del director academico de una universidad y tienes que moderar entre las preferencias de los profesores y la disponibilidad de los distintos espacios en la universidad, para ello dispones de la planificacion actual de las asignaciones y los comentarios de los profesores sobre sus preferencias de asignacion.\n";
+
+        Space space = spaceBl.getSpaceById(spaceId);
+
+
+        String prompt = "A continuacion se encuentra una lista de las asignaciones actuales del "+space.getSpaceType().getDisplayName()+" "+space.getSpaceName()+", con alguna información adicional sobre el mismo:\n" +
+
+        writePlanifications(spaceId) +
+
+        "A partir de los siguientes comentarios de docentes que han solicitado espacios para sus clases en el "+space.getSpaceType().getDisplayName()+" "+space.getSpaceName()+", indica que personas estarian descontentas con su asignacion actual y por que:\n"+
+
+        writePreferences(spaceId);
+
+        LOGGER.info("System: \n" + context);
+        LOGGER.info("Prompt: \n" + prompt);
+
+        //Create a request
+        OpenAIRequest request = new OpenAIRequest(model, context, prompt);
+
+        //Call the API
+        OpenAIResponse response = restTemplate.postForObject(apiUrl, request, OpenAIResponse.class);
+
+        if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
+            throw new RuntimeException("OpenAI API response is empty");
+        } 
+
+        SmartcalResponse smartcalResponse = new SmartcalResponse();
+        smartcalResponse.setData(response.getChoices().get(0).getMessage().getContent());
+        return smartcalResponse;
+
+    }   
+
     public SmartcalResponse generatePlanificationsAutomatically(String spaceTypeString){
 
         LOGGER.info("Called Generate Prompt");
@@ -161,12 +237,19 @@ public class OpenAIBl {
 
         //Prepare the data
 
-
-        String context = "You are the assistant to the academic director of a university and you have to assign schedules to the subjects of the university. So that the spaces of the university are used in the best possible way, you have to assign the subjects to the spaces in such a way that the spaces are used as much as possible and the subjects are assigned to the spaces that best suit their requirements.\n" +
-        "At the moment you are in charge of managing all the " + spaceType + "s of the university.";
+        /*
+        String context = "Eres el asistente del director académico de una universidad y tienes que moderar entre las preferencias de los profesores y la disponibilidad de los distintos espacios en la universidad\n"+
+        "Esta vez estás a cargo de los "+spaceType.getDisplayName() +"s de la universidad.";
 
         LOGGER.info("Context: \n" + context);
 
+        String prompt = "A continuación se encuentra una lista de los "+spaceType.getDisplayName() +"s de la universidad, con sus respectivas restricciones de horario y capacidad máxima de personas:\n" +
+        selectAssignations +
+        "A partir de los siguientes comentarios de docentes que han solicitado espacios para sus clases en los "+spaceType.getDisplayName() +"s de la universidad, indica qué personas estarían discontentas con su asignación actual y por qué:"+
+
+
+
+        
         String prompt = "You have to assign schedules the following subjects to the following spaces, such that no subject is assigned to more than one space during the same day and all the subjects requirements match the spaces restrictions without overlapping one another:\n" +
         "Subjects:\n" +
         selectSubjects(spaceType) +
@@ -188,9 +271,9 @@ public class OpenAIBl {
         "        }\n" +
         "    }\n" +
         "}\n" +
-        "Where <space_name> is the name of the space you want to assign the subject to, <subject_code> is the code of the subject you want to assign, <day> is the day of the week you want to assign the subject to, <start_time> is the time of the day you want to start the class and <end_time> is the time of the day you want to end the class.\n";
+        "Where <space_name> is the name of the space you want to assign the subject to, <subject_code> is the code of the subject you want to assign, <day> is the day of the week you want to assign the subject to, <start_time> is the time of the day you want to start the class and <end_time> is the time of the day you want to end the class.\n";*/
 
-        LOGGER.info("Prompt: \n" + prompt);
+        //LOGGER.info("Prompt: \n" + prompt);
 
         /* //Create a request
         OpenAIRequest request = new OpenAIRequest(model, context, prompt);
