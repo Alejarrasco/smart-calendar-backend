@@ -57,6 +57,27 @@ public class ScheduleBl {
         
     }
 
+    public SmartcalResponse ListAllPeriodsBySpaceId(Integer space_id){
+        LOGGER.info("Getting periods of space with id " + space_id);
+        Weekday[] weekdays = Weekday.values();
+        Map<Weekday, List<Period>> periodsGroupedByDay = new HashMap<Weekday, List<Period>>();
+
+        for(Weekday weekday : weekdays){
+            try {
+                List<Period> periodsOfDay = periodRepository.findByWeekdayAndSpaceId(weekday.name(), space_id);
+                LOGGER.info("Periods of day " + weekday.getWeekday() + ": " + periodsOfDay);
+                periodsGroupedByDay.put(weekday, periodsOfDay);
+            } catch (Exception e) {
+                LOGGER.info("no periods found for day " + weekday.getWeekday());
+                periodsGroupedByDay.put(weekday, null);
+            }
+        }
+
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(periodsGroupedByDay);
+        return response;
+    }
+
     public void CreateSchedule(String[] period_times, Space space, Date open_date, Date close_date){
         LOGGER.info("Creating schedule");
         for(String period_start_time : period_times){

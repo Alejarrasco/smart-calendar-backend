@@ -21,5 +21,8 @@ public interface SolicitudeRepository extends JpaRepository<Solicitude, Integer>
     @Query(value = "SELECT * FROM solicitude WHERE solicitude_status = 'REJECTED'", nativeQuery = true)
     List<Solicitude> findBySolicitudeStatusRejected();
 
+    @Query(value = "SELECT * FROM solicitude WHERE solicitude_status = 'PENDING' OR solicitude_status = 'APPROVED' ORDER BY solicitude_status DESC", nativeQuery = true)
+    public List<Solicitude> findAllOrderedByStatus();
+
     Solicitude findBySolicitudeId(Integer solicitudeId);
 }

@@ -110,7 +110,7 @@ public class SolicitudeBl {
 
         SmartcalResponse response = new SmartcalResponse();
         try {
-            response.setData(solicitudeRepository.findAll());
+            response.setData(solicitudeRepository.findAllOrderedByStatus());
             if (response.getData() == null){
                 throw new RuntimeException("No solicitudes found");
             }
