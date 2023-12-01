@@ -214,7 +214,7 @@ public class OpenAIBl {
         //Create a request
         OpenAIRequest request = new OpenAIRequest(model, context, prompt);
 
-        LOGGER.debug("Request: \n" + request.toString());
+        LOGGER.info("Request: \n" + request.toString());
         
         //Call the API
         OpenAIResponse response;

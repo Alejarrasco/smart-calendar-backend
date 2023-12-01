@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,10 +24,12 @@ public class AskAIAPI {
         this.openAIBl = openAIBl;
     }
 
-    @PostMapping(value = "/{spaceId}")
-    public SmartcalResponse AskAiReview(@PathVariable Integer spaceId, @RequestParam boolean call_api){
+    @PostMapping(value = "/space/{spaceId}")
+    public SmartcalResponse AskAiReview(@PathVariable Integer spaceId, @RequestParam(required = false) boolean call_api){
         LOGGER.info("Called AskAiReview "+ spaceId);
         SmartcalResponse smartcalResponse = new SmartcalResponse();
+        /*smartcalResponse.setData("Mucho texto como para que se pueda mostrar por el momento"  + spaceId);
+        return smartcalResponse; */
         try {
             // TODO : Call AI if call_api is true otherwise jsut print the prompt
             smartcalResponse = openAIBl.AskAiReview(spaceId);
