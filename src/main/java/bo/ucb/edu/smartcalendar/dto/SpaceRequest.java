@@ -71,5 +71,16 @@ public class SpaceRequest {
         this.closeDate = closeDate;
     }
 
+    @Override
+    public String toString() {
+        return "SpaceRequest for "+spaceName+"{"+
+            "spaceDescription='" + spaceDescription + '\'' +
+            ", spaceType='" + spaceType + '\'' +
+            ", capacity=" + capacity +
+            ", periodTimes=" + periodTimes +
+            ", openDate=" + openDate +
+            ", closeDate=" + closeDate +
+            '}';
+    } 
     
 }

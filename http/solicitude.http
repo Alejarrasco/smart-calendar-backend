@@ -1,7 +1,7 @@
 ###
 GET http://localhost:8080/api/v1/solicitude
 Accept: application/json
-token: 1 
+token: 0
 
 ###
 POST http://localhost:8080/api/v1/solicitude
@@ -12,9 +12,17 @@ Content-Type: application/json
   "subjectCode": "CHEM",
    "personId": 3,
   "recurrent": true,
-  "startDate": "2023-11-19",
-    "endDate": "2023-12-25",
-    "periods": [37, 38],
-    "spaceId": 10
+  "startDate": "2023-11-01",
+    "endDate": "2023-12-31",
+    "periods": [31],
+    "spaceId": 53
 }
 ###
+PUT http://localhost:8080/api/v1/solicitude/302/reject
+token: 1
+Accept: application/json
+
+###
+PUT http://localhost:8080/api/v1/solicitude/354/approve
+token: 1
+Accept: application/json

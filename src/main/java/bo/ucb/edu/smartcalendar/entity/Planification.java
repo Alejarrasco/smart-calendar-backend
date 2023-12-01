@@ -6,6 +6,7 @@ import java.sql.Time;
 import org.hibernate.annotations.Immutable;
 
 import bo.ucb.edu.smartcalendar.entity.Period.Weekday;
+import bo.ucb.edu.smartcalendar.entity.Solicitude.SolicitudeStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -34,6 +35,13 @@ public class Planification {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "solicitude_id")
+    private int solicitudeId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name= "solicitude_status")
+    private SolicitudeStatus solicitudeStatus;
 
     @Column(name = "recurrent")
     private boolean recurrent;
@@ -100,6 +108,22 @@ public class Planification {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public int getSolicitudeId() {
+        return solicitudeId;
+    }
+
+    public void setSolicitudeId(int solicitudeId) {
+        this.solicitudeId = solicitudeId;
+    }
+
+    public SolicitudeStatus getSolicitudeStatus() {
+        return this.solicitudeStatus;
+    }
+
+    public void setSolicitudeStatus(SolicitudeStatus solicitudeStatus){
+        this.solicitudeStatus = solicitudeStatus;
     }
 
 

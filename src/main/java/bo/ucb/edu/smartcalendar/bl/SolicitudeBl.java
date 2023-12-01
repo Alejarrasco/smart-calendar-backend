@@ -1,6 +1,7 @@
 package bo.ucb.edu.smartcalendar.bl;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -88,6 +89,10 @@ public class SolicitudeBl {
     public SmartcalResponse GetSolicitudes(Integer personId){
         LOGGER.info("Getting solicitudes for person id: " + personId);
 
+        if (personId == 0){
+            return GetAllSolicitudes();
+        } 
+
         SmartcalResponse response = new SmartcalResponse();
         try {
             response.setData(solicitudeRepository.findByPersonId(personId));
@@ -100,12 +105,35 @@ public class SolicitudeBl {
         return response;
     }
 
+    public SmartcalResponse GetAllSolicitudes(){
+        LOGGER.info("Getting all solicitudes");
+
+        SmartcalResponse response = new SmartcalResponse();
+        try {
+            response.setData(solicitudeRepository.findAllOrderedByStatus());
+            if (response.getData() == null){
+                throw new RuntimeException("No solicitudes found");
+            }
+        } catch (Exception e) {
+            LOGGER.error("Error getting all solicitudes");
+        }
+        return response;
+    }
+
     public SmartcalResponse ApproveSolicitude(Integer token, Integer solicitudeId){
         LOGGER.info("Approving solicitude id: " + solicitudeId);
 
         Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
         if (solicitude == null){
             throw new RuntimeException("No solicitude found for id: " + solicitudeId);
+        }
+        List<Assignation> conflictingAssignations = solicitudeCausesConflicts(solicitude);
+        if (conflictingAssignations.size() > 0){
+            String conflictingAssString = "Solicitude causes conflicts with assignations:";
+            for (Assignation conflictingAssignation : conflictingAssignations){
+                conflictingAssString += conflictingAssignation.getsolicitude().getsolicitudeId() + " "+ conflictingAssignation.getsolicitude().getSubject().getSubjectName() + " " + conflictingAssignation.getsolicitude().getRegisterDate() + "\n";
+            }
+            throw new RuntimeException(conflictingAssString);
         }
         solicitude.setSolicitudeStatus(Solicitude.SolicitudeStatus.APPROVED);
         solicitudeRepository.save(solicitude);
@@ -121,6 +149,7 @@ public class SolicitudeBl {
     }
 
     public SmartcalResponse RejectSolicitude(Integer token, Integer solicitudeId){
+        //TODO: Validate if token belongs to an administrator
         LOGGER.info("Rejecting solicitude id: " + solicitudeId);
 
         Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
@@ -132,7 +161,8 @@ public class SolicitudeBl {
 
         List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitudeId);
         for (Assignation assignation : assignations){
-            assignationRepository.delete(assignation);
+            assignation.setAssignationStatus(false);
+            assignationRepository.save(assignation);
         }
 
         SmartcalResponse response = new SmartcalResponse();
@@ -141,6 +171,7 @@ public class SolicitudeBl {
     }
 
     public SmartcalResponse CancelSolicitude(Integer token, Integer solicitudeId){
+        //TODO: Validate if token belongs to the solicitude responsible
         LOGGER.info("Cancelling solicitude id: " + solicitudeId);
 
         Solicitude solicitude = solicitudeRepository.findBySolicitudeId(solicitudeId);
@@ -152,12 +183,29 @@ public class SolicitudeBl {
 
         List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitudeId);
         for (Assignation assignation : assignations){
-            assignationRepository.delete(assignation);
+            assignation.setAssignationStatus(false);
+            assignationRepository.save(assignation);
         }
 
         SmartcalResponse response = new SmartcalResponse();
         response.setData(solicitude);
         return response;
+    }
+
+    private List<Assignation> solicitudeCausesConflicts(Solicitude solicitude){
+        List<Assignation> conflictingAssignations = new ArrayList<Assignation>();
+        List<Assignation> assignations = assignationRepository.findBySolicitudeId(solicitude.getsolicitudeId());
+        for (Assignation assignation : assignations){
+            List<Assignation> mayCauseConflictAssignations = assignationRepository.findByScheduleId(assignation.getSchedule().getScheduleId());
+            for (Assignation conflictingAssignation : mayCauseConflictAssignations){
+                if (conflictingAssignation.getAssignationId() != assignation.getAssignationId()){
+                    if (conflictingAssignation.getsolicitude().getsolicitudeStatus() == Solicitude.SolicitudeStatus.APPROVED){
+                        conflictingAssignations.add(conflictingAssignation);
+                    }
+                }
+            }
+        }
+        return conflictingAssignations;
     }
 
 }

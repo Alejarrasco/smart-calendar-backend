@@ -15,5 +15,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
     public Schedule findByScheduleId(Integer scheduleId);
 
     @Query(value = "SELECT * FROM schedule WHERE space_id = ?1 AND schedule_status = 1", nativeQuery = true)
-    public Schedule findBySpaceId(Integer spaceId);
+    public List<Schedule> findBySpaceId(Integer spaceId);
+
+    @Query(value = "SELECT MIN(p.start_time) FROM schedule s INNER JOIN period p ON s.period_id = p.period_id WHERE s.space_id = ?1 AND s.schedule_status = 1", nativeQuery = true)
+    public String findMinStartTimeBySpaceId(Integer spaceId);
+
+    @Query(value = "SELECT MAX(p.end_time) FROM schedule s INNER JOIN period p ON s.period_id = p.period_id WHERE s.space_id = ?1 AND s.schedule_status = 1", nativeQuery = true)
+    public String findMaxEndTimeBySpaceId(Integer spaceId);
 }

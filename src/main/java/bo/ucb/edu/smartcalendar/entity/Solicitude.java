@@ -150,7 +150,7 @@ public class Solicitude {
     public enum SolicitudeStatus {
         PENDING("Pendiente"),
         APPROVED("Aprobada"),
-        PAST("Pasada"),
+        PAST("Pasada"), //TODO if the solicitude end_date is before now, set it as PAST
         REJECTED("Rechazada"),
         CANCELED("Cancelada");
 

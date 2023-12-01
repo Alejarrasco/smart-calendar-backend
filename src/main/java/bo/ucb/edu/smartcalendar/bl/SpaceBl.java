@@ -75,6 +75,7 @@ public class SpaceBl {
 
     public SmartcalResponse CreateSpace(SpaceRequest spaceRequest){
         Space space = new Space();
+        LOGGER.info("Space request: " + spaceRequest);
         space.setSpaceName(spaceRequest.getSpaceName());
         space.setSpaceDescription(spaceRequest.getSpaceDescription());
         space.setSpaceType(SpaceType.fromDisplayName(spaceRequest.getSpaceType())); 
@@ -110,6 +111,27 @@ public class SpaceBl {
         LOGGER.info("Space: " + space);
         SmartcalResponse response = new SmartcalResponse();
         response.setData(space);
+        return response;
+    }
+
+    public List<Space> getSpacesByRequirements(SpaceType spaceType, Integer maxAlumni){
+        LOGGER.info("Called getSpacesByRequirements");
+        List<Space> spaces = spaceRepository.findBySpaceTypeAndCapacityGreaterThanEqual(spaceType.name(), maxAlumni);
+        if (spaces == null) {
+            LOGGER.error("No space found that meets the requirements");
+            throw new RuntimeException("No space found that meets the requirements");
+        }
+        return spaces;
+    }
+
+    public SmartcalResponse ListSpaceTypes(){
+        LOGGER.info("Called ListSpaceTypes");
+        SmartcalResponse response = new SmartcalResponse();
+        String[] spaceTypes = new String[SpaceType.values().length];
+        for(SpaceType spaceType : SpaceType.values()){
+            spaceTypes[spaceType.ordinal()] = spaceType.getDisplayName();
+        }
+        response.setData(spaceTypes);
         return response;
     }
 }

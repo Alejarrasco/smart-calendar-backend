@@ -1,0 +1,37 @@
+[{
+    "space": "Room 101",
+    "schedule": [{
+        "subject_code": "MATH101",
+        "assigned_hours": [
+          {
+            "day": "Monday",
+            "start_time": "08:00:00",
+            "end_time": "09:00:00"
+          },
+          {
+            "day": "Wednesday",
+            "start_time": "08:00:00",
+            "end_time": "09:00:00"
+          }
+        ]
+      },{
+        "subject_code": "HIST101",
+        "assigned_hours": [
+          {
+            "day": "Tuesday",
+            "start_time": "08:00:00",
+            "end_time": "10:00:00"
+          }
+        ]
+      },{
+        "subject_code": "CS202",
+        "assigned_hours": [
+          {
+            "day": "Thursday",
+            "start_time": "08:00:00",
+            "end_time": "09:30:00"
+          }
+        ]
+      }
+    ]
+}]

@@ -14,4 +14,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Integer> {
     
     @Query(value = "SELECT * FROM subject WHERE subject_code = ?1 AND subject_status = 1", nativeQuery = true)
     public Subject findByCode(String code);
+
+    @Query(value = "SELECT s.* FROM subject s INNER JOIN responsible r ON s.subject_id = r.subject_id WHERE r.person_id = ?1 AND s.subject_status = 1 AND r.responsible_status = 1", nativeQuery = true)
+    public List<Subject> findByResponsibles(Integer responsibleId);
 }

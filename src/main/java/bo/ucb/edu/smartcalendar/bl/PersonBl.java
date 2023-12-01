@@ -65,4 +65,11 @@ public class PersonBl {
         }
     }
 
+    public SmartcalResponse FindPersonById(Integer id) throws RuntimeException{
+        LOGGER.info("Called FindPersonById");
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(personRepository.findById(id).orElseThrow(() -> new RuntimeException("Person not found")));
+        return response;
+    }
+
 }

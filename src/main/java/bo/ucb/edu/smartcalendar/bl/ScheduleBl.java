@@ -57,6 +57,27 @@ public class ScheduleBl {
         
     }
 
+    public SmartcalResponse ListAllPeriodsBySpaceId(Integer space_id){
+        LOGGER.info("Getting periods of space with id " + space_id);
+        Weekday[] weekdays = Weekday.values();
+        Map<Weekday, List<Period>> periodsGroupedByDay = new HashMap<Weekday, List<Period>>();
+
+        for(Weekday weekday : weekdays){
+            try {
+                List<Period> periodsOfDay = periodRepository.findByWeekdayAndSpaceId(weekday.name(), space_id);
+                LOGGER.info("Periods of day " + weekday.getWeekday() + ": " + periodsOfDay);
+                periodsGroupedByDay.put(weekday, periodsOfDay);
+            } catch (Exception e) {
+                LOGGER.info("no periods found for day " + weekday.getWeekday());
+                periodsGroupedByDay.put(weekday, null);
+            }
+        }
+
+        SmartcalResponse response = new SmartcalResponse();
+        response.setData(periodsGroupedByDay);
+        return response;
+    }
+
     public void CreateSchedule(String[] period_times, Space space, Date open_date, Date close_date){
         LOGGER.info("Creating schedule");
         for(String period_start_time : period_times){
@@ -81,18 +102,29 @@ public class ScheduleBl {
 
     public SmartcalResponse CloseScheduleBySpaceId(Integer space_id){
         LOGGER.info("Closing schedule of space with id " + space_id);
-        Schedule schedule = scheduleRepository.findBySpaceId(space_id);
-        List<Assignation> assignations = assignationRepository.findByScheduleId(schedule.getScheduleId());
-        for(Assignation assignation : assignations){
-            //Set status of assignation to false
-            assignation.setAssignationStatus(false);
-            assignationRepository.save(assignation);
+        List<Schedule> schedules = scheduleRepository.findBySpaceId(space_id);
+        for(Schedule schedule : schedules){
+            List<Assignation> assignations = assignationRepository.findByScheduleId(schedule.getScheduleId());
+            for(Assignation assignation : assignations){
+                //Set status of assignation to false
+                assignation.setAssignationStatus(false);
+                assignationRepository.save(assignation);
+            }
+            schedule.setScheduleStatus(false);
+            scheduleRepository.save(schedule);
         }
-        schedule.setScheduleStatus(false);
         SmartcalResponse response = new SmartcalResponse();
-        response.setData("Schedule closed");
+        response.setData(schedules.size() + " schedules closed");
         return response;
     }
 
-    
+    public String earliestOpenTime(Space space){
+        LOGGER.info("Getting earliest open time of space " + space.getSpaceName());
+        return scheduleRepository.findMinStartTimeBySpaceId(space.getSpaceId());
+    }
+
+    public String latestCloseTime(Space space){
+        LOGGER.info("Getting latest close time of space " + space.getSpaceName());
+        return scheduleRepository.findMaxEndTimeBySpaceId(space.getSpaceId());
+    }
 }

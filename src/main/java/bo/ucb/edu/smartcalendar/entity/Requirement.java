@@ -46,6 +46,9 @@ public class Requirement {
     @Column(columnDefinition = "BIT(1) DEFAULT 1",name = "requirement_status", nullable = false)
     private boolean requirementStatus = true;
 
+    @Column(name = "preferences", nullable = true, length = 400)
+    private String preferences;
+
     //Aud fields
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", name = "aud_date", nullable = false)
     private Date audDate = new Date(System.currentTimeMillis());
@@ -137,6 +140,14 @@ public class Requirement {
 
     public void setRequirementStatus(boolean requirementStatus) {
         this.requirementStatus = requirementStatus;
+    }
+
+    public String getPreferences(){
+        return this.preferences;
+    }
+
+    public void setPreferences(String preferences){
+        this.preferences = preferences;
     }
 
     @Override

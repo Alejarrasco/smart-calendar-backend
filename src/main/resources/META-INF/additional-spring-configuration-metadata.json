@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "openai.model",
+    "type": "java.lang.String",
+    "description": "The selected model to use for the API call. The default is GPT-4.5"
+  },
+  {
+    "name": "openai.api.key",
+    "type": "java.lang.String",
+    "description": "The personal API key for OpenAI"
+  },
+  {
+    "name": "openai.api.url",
+    "type": "java.lang.String",
+    "description": "The URL for chat responses from OpenAI"
+  }
+]}
