@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -213,16 +214,30 @@ public class OpenAIBl {
         //Create a request
         OpenAIRequest request = new OpenAIRequest(model, context, prompt);
 
+        LOGGER.debug("Request: \n" + request.toString());
+        
         //Call the API
-        OpenAIResponse response = restTemplate.postForObject(apiUrl, request, OpenAIResponse.class);
+        OpenAIResponse response;
+        try {
+            response = restTemplate.postForObject(apiUrl, request, OpenAIResponse.class);
 
-        if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
-            throw new RuntimeException("OpenAI API response is empty");
-        } 
+            LOGGER.info("Response: \n" + response.toString());
 
-        SmartcalResponse smartcalResponse = new SmartcalResponse();
-        smartcalResponse.setData(response.getChoices().get(0).getMessage().getContent());
-        return smartcalResponse;
+            if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
+                throw new RuntimeException("OpenAI API response is empty");
+            } 
+
+            SmartcalResponse smartcalResponse = new SmartcalResponse();
+            smartcalResponse.setData(response.getChoices().get(0).getMessage().getContent());
+            return smartcalResponse;
+        } catch (RestClientException e) {
+            LOGGER.error("Error: " + e);
+            e.printStackTrace();
+            throw new RuntimeException("Error processing OpenAI API response"+e.getMessage());
+
+        }
+
+        
 
     }   
 

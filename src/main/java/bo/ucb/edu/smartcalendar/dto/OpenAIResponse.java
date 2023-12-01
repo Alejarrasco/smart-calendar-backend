@@ -10,6 +10,9 @@ public class OpenAIResponse {
         this.choices = choices;
     }
 
+    public OpenAIResponse() {
+    }
+
     public List<Choice> getChoices() {
         return choices;
     }
@@ -27,6 +30,9 @@ public class OpenAIResponse {
             this.index = index;
             this.message = message;
         }
+
+        public Choice() {
+        }
         public int getIndex() {
             return index;
         }
@@ -40,7 +46,22 @@ public class OpenAIResponse {
             this.message = message;
         }
 
+        @Override
+        public String toString(){
+            return "Choice{" +
+                "index=" + index +
+                ", message=" + message +
+                '}';
+        }
+
         
+    }
+
+    @Override
+    public String toString(){
+        return "OpenAIResponse{" +
+            "choices=" + choices +
+            '}';
     }
     
 }

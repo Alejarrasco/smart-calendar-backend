@@ -6,16 +6,14 @@ import java.util.List;
 public class OpenAIRequest {
     
     private String model;
-    private String responseFormat;
     private List<Message> messages;
-    private int n;
-    private double temperature;
+    private int n = 1;
+    private double temperature = 1.0;
 
     public OpenAIRequest(String model, String context, String prompt) {
         this.model = model;
-        this.responseFormat = "json_object";
 
-        List<Message> messages = new ArrayList<>();
+        this.messages = new ArrayList<>();
         messages.add(new Message("system", context));
         messages.add(new Message("user", prompt));
     }
@@ -26,14 +24,6 @@ public class OpenAIRequest {
 
     public void setModel(String model) {
         this.model = model;
-    }
-
-    public String getResponseFormat() {
-        return responseFormat;
-    }
-
-    public void setResponseFormat(String responseFormat) {
-        this.responseFormat = responseFormat;
     }
 
     public List<Message> getMessages() {
@@ -58,5 +48,15 @@ public class OpenAIRequest {
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
+    }
+
+    @Override
+    public String toString(){
+        return "OpenAIRequest{" +
+            "model='" + model + '\'' +
+            ", messages=" + messages +
+            ", n=" + n +
+            ", temperature=" + temperature +
+            '}';
     }
 }
